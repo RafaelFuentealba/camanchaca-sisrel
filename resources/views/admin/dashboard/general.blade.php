@@ -4,7 +4,7 @@
 
 <section class="section">
     <div class="section-body">
-        <div class="row">            
+        <div class="row">
             <div class="col-12">
                 <div class="row">
                     <div class="col-3"></div>
@@ -92,7 +92,7 @@
                                 <div class="padding-20">
                                     <div class="text-right">
                                         <h3 class="font-light mb-0" data-toggle="tooltip" data-placement="right" title="{{ '$'.number_format($inversion, 0, ',', '.') }}">
-                                            <i class="ti-arrow-up text-success"></i> 
+                                            <i class="ti-arrow-up text-success"></i>
                                             @if ($inversion > 1000000)
                                                 {{ number_format($inversion / 1000000, 1).' M' }}
                                             @else
@@ -166,9 +166,9 @@
                                 <div class="gallery gallery-md">
                                     @foreach ($objetivos as $obj)
                                         @if (in_array($obj->obde_codigo, $odsvinculados))
-                                            <div class="gallery-item" data-image="{{ asset($obj->obde_ruta_imagen) }}" data-title="{{ $obj->obde_nombre }}"></div>    
+                                            <div class="gallery-item" data-image="{{ asset($obj->obde_ruta_imagen) }}" data-title="{{ $obj->obde_nombre }}"></div>
                                         @else
-                                            <div class="gallery-item" style="filter: saturate(0) opacity(0.40);" data-image="{{ asset($obj->obde_ruta_imagen) }}" data-title="{{ $obj->obde_nombre }}"></div>    
+                                            <div class="gallery-item" style="filter: saturate(0) opacity(0.40);" data-image="{{ asset($obj->obde_ruta_imagen) }}" data-title="{{ $obj->obde_nombre }}"></div>
                                         @endif
                                     @endforeach
                                 </div>
@@ -251,7 +251,7 @@
                             }]
                         },
                     }
-                }); 
+                });
             },
             error: function(error) {
                 console.log(error);
@@ -318,7 +318,7 @@
                             }]
                         },
                     }
-                }); 
+                });
             },
             error: function(error) {
                 console.log(error);
@@ -336,7 +336,7 @@
                 resPilares = respuesta.resultado[0];
                 resInversion = respuesta.resultado[1];
                 totalInversion = resInversion.reduce((partialSum, a) => partialSum + a, 0);
-                
+
                 pilares = [];
                 resPilares.forEach(registro => {
                     pilares.push(registro.pila_nombre);

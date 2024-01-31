@@ -270,14 +270,21 @@ class HomeObservadorController extends Controller
     //TODO: Datos para graficos
     public function iniciativasGeneral(Request $request)
     {
+        $filtro_region = $request->region;
+        $filtro_division = $request->division;
         $pilares = Pilares::select('pila_codigo', 'pila_nombre')->where('pila_vigente', 'S')->get();
         $iniciativas = Iniciativas::select('pila_codigo', DB::raw('count(*) as total'))->groupBy('pila_codigo')
             ->join('iniciativas_ubicaciones', 'iniciativas_ubicaciones.inic_codigo', 'iniciativas.inic_codigo')
             ->join('comunas', 'comunas.comu_codigo', 'iniciativas_ubicaciones.comu_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
-        $filtro_region = $request->region;
         if ($filtro_region != null) {
             $iniciativas->where('regiones.regi_codigo', $filtro_region);
+        }
+
+        if($filtro_division != null){
+            $iniciativas->join('iniciativas_unidades','iniciativas_unidades.inic_codigo','iniciativas.inic_codigo')
+            ->join('unidades','unidades.unid_codigo','iniciativas_unidades.unid_codigo')
+            ->where('unidades.divi_codigo',$filtro_division);
         }
         $iniciativas = $iniciativas->get();
         $iniciativasPilares = [];
@@ -294,14 +301,21 @@ class HomeObservadorController extends Controller
 
     public function organizacionesGeneral(Request $request)
     {
+        $filtro_region = $request->region;
+        $filtro_divisones = $request->division;
         $entornos = Entornos::select('ento_codigo', 'ento_nombre')->where('ento_vigente', 'S')->get();
         $organizaciones = Organizaciones::select('ento_codigo', DB::raw('count(*) as total'))->groupBy('ento_codigo')->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
-        $filtro_region = $request->region;
 
         if ($filtro_region != null) {
             $organizaciones->where('regiones.regi_codigo', $filtro_region);
         }
+
+        if($filtro_divisones != null){
+            $organizaciones->join('unidades','unidades.comu_codigo','comunas.comu_codigo')
+            ->where('unidades.divi_codigo',$filtro_divisones);
+        }
+
         $organizaciones = $organizaciones->get();
         $orgaEntornos = [];
         foreach ($entornos as $entorno) {

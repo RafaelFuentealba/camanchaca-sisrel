@@ -240,7 +240,7 @@
                         </div>
                     </div>
 
-                    {{-- <div class="row">
+                    <div class="row">
                         <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-header">
@@ -319,7 +319,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
             </div>
         </div>
@@ -382,7 +382,8 @@
                 type: 'GET',
                 url: window.location.origin + '/observador/dashboard/general/iniciativas',
                 data: {
-                    region: $('#region').val()
+                    region: $('#region').val(),
+                    division: $('#division').val()
                 },
                 success: function(resConsultar) {
                     respuesta = JSON.parse(resConsultar);
@@ -421,7 +422,8 @@
                 type: 'GET',
                 url: window.location.origin + '/observador/dashboard/general/organizaciones',
                 data: {
-                    region: $('#region').val()
+                    region: $('#region').val(),
+                    division: $('#division').val()
                 },
                 success: function(resConsultar) {
                     respuesta = JSON.parse(resConsultar);
