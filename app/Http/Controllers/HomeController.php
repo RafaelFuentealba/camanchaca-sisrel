@@ -20,6 +20,7 @@ use App\Models\Organizaciones;
 use App\Models\Participantes;
 use App\Models\Pilares;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Js;
 
@@ -152,6 +153,135 @@ class HomeController extends Controller
         ]);
     }
 
+    public function generarReporte(Request $request)
+    {
+
+        //Obtener los datos del formulario
+        $region = $request->input('regi_codigo');
+        $comuna = $request->input('comu_codigo');
+        $division = $request->input('divi_codigo');
+        $fechaInicio = $request->input('fecha_inicio');
+        $fechaFinal = $request->input('fecha_final');
+
+        $iniciativasCantidad = Iniciativas::select('iniciativas.inic_codigo')->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
+            ->join('unidades', 'unidades.unid_codigo', 'iniciativas_unidades.unid_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            // ->join('tipo_unidades', 'tipo_unidades.tuni_codigo', 'unidades.tuni_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
+            ->where('inic_vigente', 'S')
+            // ->whereBetween('inic_fecha_fin', [$fechaInicio, $fechaFinal]);
+            ->where(function ($query) use ($fechaInicio, $fechaFinal) {
+                // Agregar el filtro de fecha_inicio
+                $query->whereBetween('inic_fecha_inicio', [$fechaInicio, $fechaFinal])
+                    // O el filtro de fecha_fin
+                    ->orWhereBetween('inic_fecha_fin', [$fechaInicio, $fechaFinal]);
+            });
+
+
+        // ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+        $actividadesCantidad = Actividades::select('acti_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'actividades.comu_codigo')
+            ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            // ->join('tipo_unidades', 'tipo_unidades.tuni_codigo', 'unidades.tuni_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
+            ->whereBetween('acti_creado', [$fechaInicio, $fechaFinal]);
+
+        $organizacionesCantidadActividades = Actividades::select('actividades.orga_codigo')
+            ->join('organizaciones', 'organizaciones.orga_codigo', 'actividades.orga_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'actividades.comu_codigo')
+            ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            // ->join('tipo_unidades', 'tipo_unidades.tuni_codigo', 'unidades.tuni_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
+            ->whereBetween('actividades.acti_creado', [$fechaInicio, $fechaFinal]);
+
+        $organizacionesCantidad = Organizaciones::select('organizaciones.orga_nombre', 'comunas.comu_nombre')->where('orga_vigente', 'S')
+            ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
+            ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            // ->join('tipo_unidades', 'tipo_unidades.tuni_codigo', 'unidades.tuni_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
+            ->whereBetween('organizaciones.orga_creado', [$fechaInicio, $fechaFinal]);
+
+        $costosDonaciones = Donaciones::select(DB::raw('IFNULL(sum(dona_monto), 0) as total'))->where('dona_vigente', 'S')
+            ->join('comunas', 'comunas.comu_codigo', 'donaciones.comu_codigo')
+            ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            // ->join('tipo_unidades', 'tipo_unidades.tuni_codigo', 'unidades.tuni_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
+            ->whereBetween('donaciones.dona_creado', [$fechaInicio, $fechaFinal]);
+
+
+        if ($region != null || $region != '') {
+            $iniciativasCantidad->where('regiones.regi_nombre', $region);
+            $actividadesCantidad->where('regiones.regi_nombre', $region);
+            $organizacionesCantidadActividades->where('regiones.regi_nombre', $region);
+            $organizacionesCantidad->where('regiones.regi_nombre', $region);
+            $costosDonaciones->where('regiones.regi_nombre', $region);
+        }
+
+        if ($comuna != null || $comuna != '') {
+            $iniciativasCantidad->where('comunas.comu_nombre', $comuna);
+            $actividadesCantidad->where('comunas.comu_nombre', $comuna);
+            $organizacionesCantidadActividades->where('comunas.comu_nombre', $comuna);
+            $organizacionesCantidad->where('comunas.comu_nombre', $comuna);
+            $costosDonaciones->where('comunas.comu_nombre', $comuna);
+        }
+
+        // if ($tipo_unidad != null || $tipo_unidad != '') {
+        //     $iniciativasCantidad->where('tipo_unidades.tuni_codigo', $tipo_unidad);
+        //     $actividadesCantidad->where('tipo_unidades.tuni_codigo', $tipo_unidad);
+        //     $organizacionesCantidadActividades->where('tipo_unidades.tuni_codigo', $tipo_unidad);
+        //     $organizacionesCantidad->where('tipo_unidades.tuni_codigo', $tipo_unidad);
+        //     $costosDonaciones->where('tipo_unidades.tuni_codigo', $tipo_unidad);
+        // }
+
+        if ($division != null || $division != '') {
+            $iniciativasCantidad->where('divisiones.divi_nombre', $division);
+            $actividadesCantidad->where('divisiones.divi_nombre', $division);
+            $organizacionesCantidadActividades->where('divisiones.divi_nombre', $division);
+            $organizacionesCantidad->where('divisiones.divi_nombre', $division);
+            $costosDonaciones->where('divisiones.divi_nombre', $division);
+        }
+
+
+
+
+        $organizacionesByComunas = $organizacionesCantidad->groupBy('comunas.comu_nombre', 'organizaciones.orga_nombre')->get();
+        $iniciativasCantidad = $iniciativasCantidad->get();
+        $costosDonaciones = $costosDonaciones->first()->total;
+        $organizacionesCantidad = $organizacionesCantidad->get();
+        $actividadesCantidad = $actividadesCantidad->get();
+        $organizacionesCantidadActividades = $organizacionesCantidadActividades->distinct()->get();
+
+
+
+        // Obtén el HTML de la vista que contiene el gráfico y otros elementos
+        // $html = view(
+        //     'observador.dashboard.reporte',
+        //     compact(
+        //         'iniciativasCantidad',
+        //         'actividadesCantidad',
+        //         'organizacionesCantidadActividades',
+        //         'organizacionesCantidad',
+        //         'costosDonaciones',
+        //         'organizacionesByComunas'
+        //     )
+        // )->render();
+
+        // $pdf = PDF::loadHTML($html);
+
+        // $pdf->setPaper('A4', 'portrait');
+
+        // Descarga o muestra el PDF al navegador
+        // return $pdf->stream('reporte.pdf');
+
+        $fechaInicio = Carbon::parse($fechaInicio)->format('d-m-Y');
+        $fechaFinal = Carbon::parse($fechaFinal)->format('d-m-Y');
+        return view('admin.dashboard.reporte', compact('fechaInicio','fechaFinal','iniciativasCantidad', 'organizacionesByComunas', 'actividadesCantidad', 'organizacionesCantidadActividades', 'organizacionesCantidad', 'costosDonaciones'));
+    }
     function estaditicasNacionales()
     {
         return view('admin.estadisticas.nacionales');

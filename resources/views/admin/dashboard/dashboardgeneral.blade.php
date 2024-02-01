@@ -177,7 +177,7 @@
                                             <div class="col-12 col-md-12 col-lg-12 text-right">
                                                 <button type="submit" class="btn btn-primary mr-1 waves-effect"><i
                                                         class="fas fa-search"></i> Filtrar</button>
-                                                <a href="{{ route('observador.dbgeneral.index') }}" type="button"
+                                                <a href="{{ route('admin.dbgeneral.index') }}" type="button"
                                                     class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i>
                                                     Limpiar</a>
                                             </div>
@@ -247,7 +247,7 @@
                                     <h4>Indicar dato para reporte</h4>
                                 </div>
                                 <div class="card-body">
-                                    <form action="{{ route('observador.index.reporte') }}" target="_blank"
+                                    <form action="{{ route('admin.index.reporte') }}" target="_blank"
                                         method="GET">
                                         {{-- @csrf --}}
                                         <div class="row">

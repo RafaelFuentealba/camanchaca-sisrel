@@ -45,6 +45,8 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/dashboard/general', [HomeController::class, 'GeneralIndex'])->name('admin.dbgeneral.index');
     Route::get('admin/dashboard/general/iniciativas', [HomeController::class, 'iniciativasGeneral']);
     Route::get('admin/dashboard/general/organizaciones', [HomeController::class, 'organizacionesGeneral']);
+
+    Route::get('admin/dashboard/general/reporte',[HomeController::class,'generarReporte'])->name('admin.index.reporte');
     Route::get('admin/dashboard/general/inversion', [HomeController::class, 'inversionGeneral']);
     Route::get('admin/dashboard/iniciativas', [HomeController::class, 'IniciativasIndex'])->name('admin.index.iniciativas');
     Route::get('admin/dashboard/iniciativas/inic-unid', [HomeController::class, 'iniciativasUnidades']);
