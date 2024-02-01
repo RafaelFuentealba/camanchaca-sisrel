@@ -25,35 +25,130 @@ use Illuminate\Support\Js;
 
 class HomeController extends Controller
 {
-    public function GeneralIndex()
+    public function GeneralIndex(Request $request)
     {
 
-        $cantidadIniciativas = Iniciativas::where('inic_vigente', 'S')->count();
+        $filtro_region = $request->region;
+        $filtro_division = $request->division;
+        // return $filtro_region;
+        $cantidadIniciativas = Iniciativas::where('inic_vigente', 'S')->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
+            ->join('unidades', 'unidades.unid_codigo', 'iniciativas_unidades.unid_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+        $cantidadOrganizaciones = Organizaciones::where('orga_vigente', 'S')->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
+            ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+        $costosDinero = CostosDinero::select(DB::raw('IFNULL(sum(codi_valorizacion), 0) as total'))->where('codi_vigente', 'S')
+            ->join('iniciativas', 'iniciativas.inic_codigo', 'costos_dinero.inic_codigo')
+            ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
+            ->join('unidades', 'unidades.unid_codigo', 'iniciativas_unidades.unid_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+        $costosEspecies = CostosEspecies::select(DB::raw('IFNULL(sum(coes_valorizacion), 0) as total'))->where('coes_vigente', 'S')->join('iniciativas', 'iniciativas.inic_codigo', 'costos_especies.inic_codigo')
+            ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
+            ->join('unidades', 'unidades.unid_codigo', 'iniciativas_unidades.unid_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+        $costosInfra = CostosInfraestructura::select(DB::raw('IFNULL(sum(coin_valorizacion), 0) as total'))->where('coin_vigente', 'S')->join('iniciativas', 'iniciativas.inic_codigo', 'costos_infraestructura.inic_codigo')
+            ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
+            ->join('unidades', 'unidades.unid_codigo', 'iniciativas_unidades.unid_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+        $costosRrhh = CostosRrhh::select(DB::raw('IFNULL(sum(corh_valorizacion), 0) as total'))->where('corh_vigente', 'S')->join('iniciativas', 'iniciativas.inic_codigo', 'costos_rrhh.inic_codigo')
+            ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
+            ->join('unidades', 'unidades.unid_codigo', 'iniciativas_unidades.unid_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+        $costosDonaciones = Donaciones::select(DB::raw('IFNULL(sum(dona_monto), 0) as total'))->where('dona_vigente', 'S')->join('organizaciones', 'organizaciones.orga_codigo', 'donaciones.orga_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
+            ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+        $inviIniciativas = Iniciativas::select(DB::raw('IFNULL(SUM(inic_inrel), 0) AS suma_total, COUNT(*) as total_iniciativas'))->join('iniciativas_ubicaciones', 'iniciativas_ubicaciones.inic_codigo', 'iniciativas.inic_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'iniciativas_ubicaciones.comu_codigo')
+            ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
 
-        $cantidadOrganizaciones = Organizaciones::where('orga_vigente', 'S')->count();
-        $costosDinero = CostosDinero::select(DB::raw('IFNULL(sum(codi_valorizacion), 0) as total'))->where('codi_vigente', 'S')->first()->total;
-        $costosEspecies = CostosEspecies::select(DB::raw('IFNULL(sum(coes_valorizacion), 0) as total'))->where('coes_vigente', 'S')->first()->total;
-        $costosInfra = CostosInfraestructura::select(DB::raw('IFNULL(sum(coin_valorizacion), 0) as total'))->where('coin_vigente', 'S')->first()->total;
-        $costosRrhh = CostosRrhh::select(DB::raw('IFNULL(sum(corh_valorizacion), 0) as total'))->where('corh_vigente', 'S')->first()->total;
-        $costosDonaciones = Donaciones::select(DB::raw('IFNULL(sum(dona_monto), 0) as total'))->where('dona_vigente', 'S')->first()->total;
+        if ($filtro_region != null) {
+            $cantidadIniciativas->where('regiones.regi_codigo', $filtro_region);
+
+            $cantidadOrganizaciones->where('regiones.regi_codigo', $filtro_region);
+
+            $costosDinero->where('regiones.regi_codigo', $filtro_region);
+
+            $costosEspecies->where('regiones.regi_codigo', $filtro_region);
+
+            $costosInfra->where('regiones.regi_codigo', $filtro_region);
+
+            $costosRrhh->where('regiones.regi_codigo', $filtro_region);
+
+            $costosDonaciones->where('regiones.regi_codigo', $filtro_region);
+
+            $inviIniciativas->where('regiones.regi_codigo', $filtro_region);
+        }
+
+        if ($filtro_division != null) {
+            $cantidadIniciativas->where('divisiones.divi_codigo', $filtro_division);
+
+            $cantidadOrganizaciones->where('divisiones.divi_codigo', $filtro_division);
+
+            $costosDinero->where('divisiones.divi_codigo', $filtro_division);
+
+            $costosEspecies->where('divisiones.divi_codigo', $filtro_division);
+
+            $costosInfra->where('divisiones.divi_codigo', $filtro_division);
+
+            $costosRrhh->where('divisiones.divi_codigo', $filtro_division);
+
+            $costosDonaciones->where('divisiones.divi_codigo', $filtro_division);
+
+            $inviIniciativas->where('divisiones.divi_codigo', $filtro_division);
+        }
+
+        $cantidadIniciativas = $cantidadIniciativas->count();
+        $cantidadOrganizaciones = $cantidadOrganizaciones->count();
+        $costosDinero = $costosDinero->first()->total;
+        $costosEspecies = $costosEspecies->first()->total;
+        $costosInfra = $costosInfra->first()->total;
+        $costosRrhh = $costosRrhh->first()->total;
+        $costosDonaciones = $costosDonaciones->first()->total;
+        $inviIniciativas = $inviIniciativas->first();
         $cantidadODS = IniciativasOds::select('obde_codigo')->distinct('obde_codigo')->count();
         $objetivosDesarrollo = ObjetivosDesarrollo::select('obde_codigo', 'obde_nombre', 'obde_ruta_imagen')->where('obde_vigente', 'S')->get();
         $objetivosVinculados = ObjetivosDesarrollo::select('objetivos_desarrollo.obde_codigo')->join('iniciativas_ods', 'iniciativas_ods.obde_codigo', '=', 'objetivos_desarrollo.obde_codigo')->where('obde_vigente', 'S')->distinct('objetivos_desarrollo.obde_codigo')->get();
+        $divisiones = DB::table('divisiones')->get();
         $odsVinculados = [];
-
-        $regiones = Regiones::orderBy('regi_cut', 'asc')->get();
-
+        $regiones = Regiones::select('regi_codigo', 'regi_nombre')->get();
+        if ($inviIniciativas->total_iniciativas != 0)
+            $inviPromedio = round($inviIniciativas->suma_total / $inviIniciativas->total_iniciativas);
+        else
+            $inviPromedio = 0;
         foreach ($objetivosVinculados as $obj) {
             array_push($odsVinculados, $obj->obde_codigo);
         }
-        return view('admin.dashboard.newgeneral', [
+
+        // $tipoUnidades = TipoUnidades::select('tuni_codigo', 'tuni_nombre')->get();
+        $comunas = Comunas::select('comu_codigo', 'comu_nombre')->get();
+
+        return view('admin.dashboard.dashboardgeneral', [
             'iniciativas' => $cantidadIniciativas,
             'organizaciones' => $cantidadOrganizaciones,
             'inversion' => $costosDinero + $costosEspecies + $costosInfra + $costosRrhh + $costosDonaciones,
             'ods' => $cantidadODS,
             'objetivos' => $objetivosDesarrollo,
             'odsvinculados' => $odsVinculados,
-            'regiones' => $regiones
+            'invi' => $inviPromedio,
+            'regiones' => $regiones,
+            'divisiones' => $divisiones,
+            // 'tipoUnidades' => $tipoUnidades,
+            'comunas' => $comunas,
         ]);
     }
 
@@ -165,26 +260,27 @@ class HomeController extends Controller
         $region = "";
         if (count($request->all()) > 0) {
             if ($request->regi_codigo != "") {
-                $region = DB::table('regiones')->select('regi_codigo','regi_nombre')
-                ->where('regi_codigo', $request->regi_codigo)->get();
+                $region = DB::table('regiones')->select('regi_codigo', 'regi_nombre')
+                    ->where('regi_codigo', $request->regi_codigo)->get();
             } else {
                 $region = DB::table('regiones')->get();
             }
         }
 
-        return view('admin.estadisticas.regionales',['region' => $region]);
+        return view('admin.estadisticas.regionales', ['region' => $region]);
     }
 
-    function datosRegionales(Request $request){
+    function datosRegionales(Request $request)
+    {
 
-        $donaciones = DB::table('donaciones')->select('entornos.ento_codigo','entornos.ento_nombre',DB::raw('IFNULL(sum(dona_monto), 0) as total'))
-        ->join('organizaciones','organizaciones.orga_codigo','=','donaciones.orga_codigo')
-        ->join('entornos','entornos.ento_codigo','=','organizaciones.ento_codigo')
-        ->join('comunas','comunas.comu_codigo','=','organizaciones.comu_codigo')
-        ->join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
-        ->where('regiones.regi_codigo',$request->region)
-        ->groupBy('entornos.ento_codigo', 'ento_nombre')
-        ->get();
+        $donaciones = DB::table('donaciones')->select('entornos.ento_codigo', 'entornos.ento_nombre', DB::raw('IFNULL(sum(dona_monto), 0) as total'))
+            ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+            ->join('entornos', 'entornos.ento_codigo', '=', 'organizaciones.ento_codigo')
+            ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
+            ->where('regiones.regi_codigo', $request->region)
+            ->groupBy('entornos.ento_codigo', 'ento_nombre')
+            ->get();
 
         $nombresEntornosD = [];
         $totalEntornosD = [];
@@ -194,14 +290,14 @@ class HomeController extends Controller
             array_push($totalEntornosD, $registro->total);
         }
 
-        $actividades = DB::table('actividades')->select('entornos.ento_codigo','entornos.ento_nombre',DB::raw('COUNT(*) as total'))
-        ->join('organizaciones','organizaciones.orga_codigo','=','actividades.orga_codigo')
-        ->join('entornos','entornos.ento_codigo','=','organizaciones.ento_codigo')
-        ->join('comunas','comunas.comu_codigo','=','organizaciones.comu_codigo')
-        ->join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
-        ->where('regiones.regi_codigo',$request->region)
-        ->groupBy('entornos.ento_codigo', 'ento_nombre')
-        ->get();
+        $actividades = DB::table('actividades')->select('entornos.ento_codigo', 'entornos.ento_nombre', DB::raw('COUNT(*) as total'))
+            ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+            ->join('entornos', 'entornos.ento_codigo', '=', 'organizaciones.ento_codigo')
+            ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
+            ->where('regiones.regi_codigo', $request->region)
+            ->groupBy('entornos.ento_codigo', 'ento_nombre')
+            ->get();
 
         $nombresEntornosA = [];
         $totalEntornosA = [];
@@ -214,16 +310,16 @@ class HomeController extends Controller
         }
 
 
-        $participantes = DB::table('participantes')->select('entornos.ento_codigo','entornos.ento_nombre',DB::raw('IFNULL(sum(part_cantidad_inicial), 0) as total'))
-        ->join('iniciativas','iniciativas.inic_codigo','=','participantes.inic_codigo')
-        ->join('iniciativas_ubicaciones','iniciativas_ubicaciones.inic_codigo','=','iniciativas.inic_codigo')
-        ->join('comunas','comunas.comu_codigo','=','iniciativas_ubicaciones.comu_codigo')
-        ->join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
-        ->join('organizaciones','organizaciones.comu_codigo','=','comunas.comu_codigo')
-        ->join('entornos','entornos.ento_codigo','=','organizaciones.ento_codigo')
-        ->where('regiones.regi_codigo',$request->region)
-        ->groupBy('entornos.ento_codigo', 'ento_nombre')
-        ->get();
+        $participantes = DB::table('participantes')->select('entornos.ento_codigo', 'entornos.ento_nombre', DB::raw('IFNULL(sum(part_cantidad_inicial), 0) as total'))
+            ->join('iniciativas', 'iniciativas.inic_codigo', '=', 'participantes.inic_codigo')
+            ->join('iniciativas_ubicaciones', 'iniciativas_ubicaciones.inic_codigo', '=', 'iniciativas.inic_codigo')
+            ->join('comunas', 'comunas.comu_codigo', '=', 'iniciativas_ubicaciones.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
+            ->join('organizaciones', 'organizaciones.comu_codigo', '=', 'comunas.comu_codigo')
+            ->join('entornos', 'entornos.ento_codigo', '=', 'organizaciones.ento_codigo')
+            ->where('regiones.regi_codigo', $request->region)
+            ->groupBy('entornos.ento_codigo', 'ento_nombre')
+            ->get();
 
         $nombresEntornosP = [];
         $totalEntornosP = [];
@@ -235,14 +331,14 @@ class HomeController extends Controller
             array_push($totalEntornosP, $registro->total);
         }
 
-        $iniciativas = DB::table('iniciativas_ubicaciones')->select('entornos.ento_codigo','entornos.ento_nombre',DB::raw('COUNT(*) as total'))
-        ->join('comunas','comunas.comu_codigo','=','iniciativas_ubicaciones.comu_codigo')
-        ->join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
-        ->join('organizaciones','organizaciones.comu_codigo','=','comunas.comu_codigo')
-        ->join('entornos','entornos.ento_codigo','=','organizaciones.ento_codigo')
-        ->where('regiones.regi_codigo',$request->region)
-        ->groupBy('entornos.ento_codigo', 'ento_nombre')
-        ->get();
+        $iniciativas = DB::table('iniciativas_ubicaciones')->select('entornos.ento_codigo', 'entornos.ento_nombre', DB::raw('COUNT(*) as total'))
+            ->join('comunas', 'comunas.comu_codigo', '=', 'iniciativas_ubicaciones.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
+            ->join('organizaciones', 'organizaciones.comu_codigo', '=', 'comunas.comu_codigo')
+            ->join('entornos', 'entornos.ento_codigo', '=', 'organizaciones.ento_codigo')
+            ->where('regiones.regi_codigo', $request->region)
+            ->groupBy('entornos.ento_codigo', 'ento_nombre')
+            ->get();
 
         $nombresEntornosI = [];
         $totalEntornosI = [];
@@ -255,17 +351,37 @@ class HomeController extends Controller
         }
 
         // return $iniciativas;
-        return json_encode(['N_entornos_D' => $nombresEntornosD,'T_entornos_D'=>$totalEntornosD,
-        'N_entornos_A' => $nombresEntornosA,'T_entornos_A'=>$totalEntornosA,
-        'N_entornos_P' => $nombresEntornosP,'T_entornos_P'=>$totalEntornosP,
-        'N_entornos_I' => $nombresEntornosI,'T_entornos_I'=>$totalEntornosI,
+        return json_encode([
+            'N_entornos_D' => $nombresEntornosD,
+            'T_entornos_D' => $totalEntornosD,
+            'N_entornos_A' => $nombresEntornosA,
+            'T_entornos_A' => $totalEntornosA,
+            'N_entornos_P' => $nombresEntornosP,
+            'T_entornos_P' => $totalEntornosP,
+            'N_entornos_I' => $nombresEntornosI,
+            'T_entornos_I' => $totalEntornosI,
         ]);
     }
 
-    public function iniciativasGeneral()
+    public function iniciativasGeneral(Request $request)
     {
+        $filtro_region = $request->region;
+        $filtro_division = $request->division;
         $pilares = Pilares::select('pila_codigo', 'pila_nombre')->where('pila_vigente', 'S')->get();
-        $iniciativas = Iniciativas::select('pila_codigo', DB::raw('count(*) as total'))->groupBy('pila_codigo')->get();
+        $iniciativas = Iniciativas::select('pila_codigo', DB::raw('count(*) as total'))->groupBy('pila_codigo')
+            ->join('iniciativas_ubicaciones', 'iniciativas_ubicaciones.inic_codigo', 'iniciativas.inic_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'iniciativas_ubicaciones.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+        if ($filtro_region != null) {
+            $iniciativas->where('regiones.regi_codigo', $filtro_region);
+        }
+
+        if ($filtro_division != null) {
+            $iniciativas->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
+                ->join('unidades', 'unidades.unid_codigo', 'iniciativas_unidades.unid_codigo')
+                ->where('unidades.divi_codigo', $filtro_division);
+        }
+        $iniciativas = $iniciativas->get();
         $iniciativasPilares = [];
         foreach ($pilares as $pilar) {
             $total = 0;
@@ -278,10 +394,24 @@ class HomeController extends Controller
         return json_encode(['estado' => true, 'resultado' => [$pilares, $iniciativasPilares]]);
     }
 
-    public function organizacionesGeneral()
+    public function organizacionesGeneral(Request $request)
     {
+        $filtro_region = $request->region;
+        $filtro_divisones = $request->division;
         $entornos = Entornos::select('ento_codigo', 'ento_nombre')->where('ento_vigente', 'S')->get();
-        $organizaciones = Organizaciones::select('ento_codigo', DB::raw('count(*) as total'))->groupBy('ento_codigo')->get();
+        $organizaciones = Organizaciones::select('ento_codigo', DB::raw('count(*) as total'))->groupBy('ento_codigo')->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+
+        if ($filtro_region != null) {
+            $organizaciones->where('regiones.regi_codigo', $filtro_region);
+        }
+
+        if ($filtro_divisones != null) {
+            $organizaciones->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
+                ->where('unidades.divi_codigo', $filtro_divisones);
+        }
+
+        $organizaciones = $organizaciones->get();
         $orgaEntornos = [];
         foreach ($entornos as $entorno) {
             $total = 0;
@@ -293,7 +423,6 @@ class HomeController extends Controller
         }
         return json_encode(['estado' => true, 'resultado' => [$entornos, $orgaEntornos]]);
     }
-
     public function inversionGeneral()
     {
         $pilares = Pilares::select('pila_codigo', 'pila_nombre')->where('pila_vigente', 'S')->get();
