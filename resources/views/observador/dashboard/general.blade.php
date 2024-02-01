@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
                             <div class="card card-statistic-2">
                                 <div class="card-icon l-bg-cyan">
                                     <i class="fab fa-slack"></i>
@@ -70,7 +70,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
                             <div class="card card-statistic-2">
                                 <div class="card-icon l-bg-green">
                                     <i class="fas fa-hotel"></i>
@@ -87,7 +87,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
                             <div class="card card-statistic-2">
                                 <div class="card-icon l-bg-orange">
                                     <i class="fas fa-dollar-sign"></i>
@@ -110,7 +110,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        {{-- <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                             <div class="card card-statistic-2">
                                 <div class="card-icon l-bg-red">
                                     <i class="fas fa-flag-checkered"></i>
@@ -126,7 +126,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <div class="row">
@@ -249,7 +249,7 @@
                                 <div class="card-body">
                                     <form action="{{ route('observador.index.reporte') }}" target="_blank"
                                         method="GET">
-                                        @csrf
+                                        {{-- @csrf --}}
                                         <div class="row">
 
                                             <div class="col-xl-3 col-md-3 col-lg-6">
@@ -257,7 +257,7 @@
                                                     <select name="regi_codigo" id="regi_codigo" class="select2 form-control" style="width: 100%">
                                                         <option value="">Seleccione...</option>
                                                         @forelse ($regiones as $region)
-                                                            <option value="{{$region->regi_codigo}}">{{$region->regi_nombre}}</option>
+                                                            <option value="{{$region->regi_nombre}}">{{$region->regi_nombre}}</option>
                                                         @empty
                                                             <option value="">Sin registros disponibles</option>
                                                         @endforelse
@@ -270,7 +270,7 @@
                                                     <select name="comu_codigo" id="comu_codigo" class="select2 form-control" style="width: 100%">
                                                         <option value="">Seleccione...</option>
                                                         @forelse ($comunas as $comuna)
-                                                            <option value="{{$comuna->comu_codigo}}">{{$comuna->comu_nombre}}</option>
+                                                            <option value="{{$comuna->comu_nombre}}">{{$comuna->comu_nombre}}</option>
                                                         @empty
                                                             <option value="">Sin registros disponibles</option>
                                                         @endforelse
@@ -279,11 +279,11 @@
                                             </div>
 
                                             <div class="col-xl-2 col-md-2 col-lg-6">
-                                                <div class="form-group"><label for="tipo_unidad">Tipo de unidad</label>
-                                                    <select name="tipo_unidad" id="tipo_unidad" class="select2 form-control" style="width: 100%">
+                                                <div class="form-group"><label for="divi_codigo">División</label>
+                                                    <select name="divi_codigo" id="divi_codigo" class="select2 form-control" style="width: 100%">
                                                         <option value="">Seleccione...</option>
-                                                        @forelse ($tipoUnidades as $tipoUnidad)
-                                                            <option value="{{$tipoUnidad->tuni_codigo}}">{{$tipoUnidad->tuni_nombre}}</option>
+                                                        @forelse ($divisiones as $division)
+                                                            <option value="{{$division->divi_nombre}}">{{$division->divi_nombre}}</option>
                                                         @empty
                                                             <option value="">Sin registros disponibles</option>
                                                         @endforelse
