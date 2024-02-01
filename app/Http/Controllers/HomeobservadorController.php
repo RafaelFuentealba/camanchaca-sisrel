@@ -38,10 +38,10 @@ class HomeObservadorController extends Controller
             ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
-        $cantidadOrganizaciones = Organizaciones::where('orga_vigente', 'S')->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
-            ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
-            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
-            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+        $cantidadOrganizaciones = Organizaciones::where('orga_vigente', 'S')->leftjoin('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
+            ->leftjoin('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
+            ->leftjoin('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->leftjoin('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
         $costosDinero = CostosDinero::select(DB::raw('IFNULL(sum(codi_valorizacion), 0) as total'))->where('codi_vigente', 'S')
             ->join('iniciativas', 'iniciativas.inic_codigo', 'costos_dinero.inic_codigo')
             ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
@@ -114,8 +114,8 @@ class HomeObservadorController extends Controller
             $inviIniciativas->where('divisiones.divi_codigo', $filtro_division);
         }
 
-        $cantidadIniciativas = $cantidadIniciativas->count();
-        $cantidadOrganizaciones = $cantidadOrganizaciones->count();
+        $cantidadIniciativas = $cantidadIniciativas->count(DB::raw('DISTINCT iniciativas.inic_codigo'));
+        $cantidadOrganizaciones = $cantidadOrganizaciones->count(DB::raw('DISTINCT organizaciones.orga_codigo'));
         $costosDinero = $costosDinero->first()->total;
         $costosEspecies = $costosEspecies->first()->total;
         $costosInfra = $costosInfra->first()->total;
