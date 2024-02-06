@@ -172,10 +172,12 @@
                                         style="width: 100%">
                                         <option value="" selected disabled>Seleccione</option>
                                         <option value="Apoyo de traslados"
-                                            {{ $actividad->acti_nombre == 'Apoyo de traslados' ? 'selected' : '' }}>Apoyo de
+                                            {{ $actividad->acti_nombre == 'Apoyo de traslados' ? 'selected' : '' }}>Apoyo
+                                            de
                                             traslados</option>
                                         <option value="Boyacompostar"
-                                            {{ $actividad->acti_nombre == 'Boyacompostar' ? 'selected' : '' }}>Boyacompostar
+                                            {{ $actividad->acti_nombre == 'Boyacompostar' ? 'selected' : '' }}>
+                                            Boyacompostar
                                         </option>
                                         <option value="Capacitación"
                                             {{ $actividad->acti_nombre == 'Capacitación' ? 'selected' : '' }}>Capacitación
@@ -183,6 +185,9 @@
                                         <option value="Comunicación ante Incidentes"
                                             {{ $actividad->acti_nombre == 'Comunicación ante Incidentes' ? 'selected' : '' }}>
                                             Comunicación ante Incidentes</option>
+                                        <option value="Comunicación comunidad"
+                                            {{ $actividad->acti_nombre == 'Comunicación comunidad' ? 'selected' : '' }}>
+                                            Comunicación comunidad</option>
                                         <option value="Comunicación sobre Apertura/Cierre"
                                             {{ $actividad->acti_nombre == 'Comunicación sobre Apertura/Cierre' ? 'selected' : '' }}>
                                             Comunicación sobre Apertura/Cierre</option>
@@ -190,19 +195,23 @@
                                             {{ $actividad->acti_nombre == 'Concientización sobre gestión de residuos' ? 'selected' : '' }}>
                                             Concientización sobre gestión de residuos</option>
                                         <option value="Entrega de donación"
-                                            {{ $actividad->acti_nombre == 'Entrega de donación' ? 'selected' : '' }}>Entrega de
+                                            {{ $actividad->acti_nombre == 'Entrega de donación' ? 'selected' : '' }}>
+                                            Entrega de
                                             donación</option>
                                         <option value="Escuela de Vela"
                                             {{ $actividad->acti_nombre == 'Escuela de Vela' ? 'selected' : '' }}>Escuela de
                                             Vela</option>
                                         <option value="Escuelas Sostenibles"
-                                            {{ $actividad->acti_nombre == 'Escuelas Sostenibles' ? 'selected' : '' }}>Escuelas
+                                            {{ $actividad->acti_nombre == 'Escuelas Sostenibles' ? 'selected' : '' }}>
+                                            Escuelas
                                             Sostenibles</option>
                                         <option value="Jornadas Formativas"
-                                            {{ $actividad->acti_nombre == 'Jornadas Formativas' ? 'selected' : '' }}>Jornadas
+                                            {{ $actividad->acti_nombre == 'Jornadas Formativas' ? 'selected' : '' }}>
+                                            Jornadas
                                             Formativas</option>
                                         <option value="Limpieza de Playas"
-                                            {{ $actividad->acti_nombre == 'Limpieza de Playas' ? 'selected' : '' }}>Limpieza de
+                                            {{ $actividad->acti_nombre == 'Limpieza de Playas' ? 'selected' : '' }}>
+                                            Limpieza de
                                             Playas</option>
                                         <option value="Mesa de Trabajo"
                                             {{ $actividad->acti_nombre == 'Mesa de Trabajo' ? 'selected' : '' }}>Mesa de
@@ -211,10 +220,12 @@
                                             {{ $actividad->acti_nombre == 'Misión Chile' ? 'selected' : '' }}>Misión Chile
                                         </option>
                                         <option value="Mitigación Impactos"
-                                            {{ $actividad->acti_nombre == 'Mitigación Impactos' ? 'selected' : '' }}>Mitigación
+                                            {{ $actividad->acti_nombre == 'Mitigación Impactos' ? 'selected' : '' }}>
+                                            Mitigación
                                             Impactos</option>
                                         <option value="Operativo de Salud"
-                                            {{ $actividad->acti_nombre == 'Operativo de Salud' ? 'selected' : '' }}>Operativo
+                                            {{ $actividad->acti_nombre == 'Operativo de Salud' ? 'selected' : '' }}>
+                                            Operativo
                                             de Salud</option>
                                         <option value="Planta de Procesos Hortalizas"
                                             {{ $actividad->acti_nombre == 'Planta de Procesos Hortalizas' ? 'selected' : '' }}>
@@ -241,10 +252,12 @@
                                             {{ $actividad->acti_nombre == 'Reunión Medios Comunicación' ? 'selected' : '' }}>
                                             Reunión Medios Comunicación</option>
                                         <option value="Reunión Auditoria 1"
-                                            {{ $actividad->acti_nombre == 'Reunión Auditoria 1' ? 'selected' : '' }}>Reunión
+                                            {{ $actividad->acti_nombre == 'Reunión Auditoria 1' ? 'selected' : '' }}>
+                                            Reunión
                                             Auditoria 1</option>
                                         <option value="Slippers Camanchaca"
-                                            {{ $actividad->acti_nombre == 'Slippers Camanchaca' ? 'selected' : '' }}>Slippers
+                                            {{ $actividad->acti_nombre == 'Slippers Camanchaca' ? 'selected' : '' }}>
+                                            Slippers
                                             Camanchaca</option>
                                         <option value="Taller Comunitario"
                                             {{ $actividad->acti_nombre == 'Taller Comunitario' ? 'selected' : '' }}>Taller
@@ -257,15 +270,20 @@
                                         style="width: 100%">
                                         <option value="" selected disabled>Seleccione</option>
                                         <option value="Apoyo de traslados"
-                                            {{ old('nombre') == 'Apoyo de traslados' ? 'selected' : '' }}>Apoyo de traslados
+                                            {{ old('nombre') == 'Apoyo de traslados' ? 'selected' : '' }}>Apoyo de
+                                            traslados
                                         </option>
                                         <option value="Boyacompostar"
                                             {{ old('nombre') == 'Boyacompostar' ? 'selected' : '' }}>Boyacompostar</option>
-                                        <option value="Capacitación" {{ old('nombre') == 'Capacitación' ? 'selected' : '' }}>
+                                        <option value="Capacitación"
+                                            {{ old('nombre') == 'Capacitación' ? 'selected' : '' }}>
                                             Capacitación</option>
                                         <option value="Comunicación ante Incidentes"
                                             {{ old('nombre') == 'Comunicación ante Incidentes' ? 'selected' : '' }}>
                                             Comunicación ante Incidentes</option>
+                                        <option value="Comunicación comunidad"
+                                            {{ old('nombre') == 'Comunicación comunidad' ? 'selected' : '' }}>
+                                            Comunicación comunidad</option>
                                         <option value="Comunicación sobre Apertura/Cierre"
                                             {{ old('nombre') == 'Comunicación sobre Apertura/Cierre' ? 'selected' : '' }}>
                                             Comunicación sobre Apertura/Cierre</option>
@@ -273,34 +291,44 @@
                                             {{ old('nombre') == 'Concientización sobre gestión de residuos' ? 'selected' : '' }}>
                                             Concientización sobre gestión de residuos</option>
                                         <option value="Entrega de donación"
-                                            {{ old('nombre') == 'Entrega de donación' ? 'selected' : '' }}>Entrega de donación
+                                            {{ old('nombre') == 'Entrega de donación' ? 'selected' : '' }}>Entrega de
+                                            donación
                                         </option>
                                         <option value="Escuela de Vela"
-                                            {{ old('nombre') == 'Escuela de Vela' ? 'selected' : '' }}>Escuela de Vela</option>
+                                            {{ old('nombre') == 'Escuela de Vela' ? 'selected' : '' }}>Escuela de Vela
+                                        </option>
                                         <option value="Escuelas Sostenibles"
                                             {{ old('nombre') == 'Escuelas Sostenibles' ? 'selected' : '' }}>Escuelas
                                             Sostenibles</option>
                                         <option value="Jornadas Formativas"
-                                            {{ old('nombre') == 'Jornadas Formativas' ? 'selected' : '' }}>Jornadas Formativas
+                                            {{ old('nombre') == 'Jornadas Formativas' ? 'selected' : '' }}>Jornadas
+                                            Formativas
                                         </option>
                                         <option value="Limpieza de Playas"
-                                            {{ old('nombre') == 'Limpieza de Playas' ? 'selected' : '' }}>Limpieza de Playas
+                                            {{ old('nombre') == 'Limpieza de Playas' ? 'selected' : '' }}>Limpieza de
+                                            Playas
                                         </option>
                                         <option value="Mesa de Trabajo"
-                                            {{ old('nombre') == 'Mesa de Trabajo' ? 'selected' : '' }}>Mesa de Trabajo</option>
-                                        <option value="Misión Chile" {{ old('nombre') == 'Misión Chile' ? 'selected' : '' }}>
+                                            {{ old('nombre') == 'Mesa de Trabajo' ? 'selected' : '' }}>Mesa de Trabajo
+                                        </option>
+                                        <option value="Misión Chile"
+                                            {{ old('nombre') == 'Misión Chile' ? 'selected' : '' }}>
                                             Misión Chile</option>
                                         <option value="Mitigación Impactos"
-                                            {{ old('nombre') == 'Mitigación Impactos' ? 'selected' : '' }}>Mitigación Impactos
+                                            {{ old('nombre') == 'Mitigación Impactos' ? 'selected' : '' }}>Mitigación
+                                            Impactos
                                         </option>
                                         <option value="Operativo de Salud"
-                                            {{ old('nombre') == 'Operativo de Salud' ? 'selected' : '' }}>Operativo de Salud
+                                            {{ old('nombre') == 'Operativo de Salud' ? 'selected' : '' }}>Operativo de
+                                            Salud
                                         </option>
                                         <option value="Planta de Procesos Hortalizas"
-                                            {{ old('nombre') == 'Planta de Procesos Hortalizas' ? 'selected' : '' }}>Planta de
+                                            {{ old('nombre') == 'Planta de Procesos Hortalizas' ? 'selected' : '' }}>Planta
+                                            de
                                             Procesos Hortalizas</option>
                                         <option value="Potenciando el crecimiento"
-                                            {{ old('nombre') == 'Potenciando el crecimiento' ? 'selected' : '' }}>Potenciando
+                                            {{ old('nombre') == 'Potenciando el crecimiento' ? 'selected' : '' }}>
+                                            Potenciando
                                             el crecimiento</option>
                                         <option value="Puertas Abiertas"
                                             {{ old('nombre') == 'Puertas Abiertas' ? 'selected' : '' }}>Puertas Abiertas
@@ -321,15 +349,19 @@
                                             {{ old('nombre') == 'Reunión Medios Comunicación' ? 'selected' : '' }}>Reunión
                                             Medios Comunicación</option>
                                         <option value="Reunión Auditoria 1"
-                                            {{ old('nombre') == 'Reunión Auditoria 1' ? 'selected' : '' }}>Reunión Auditoria 1
+                                            {{ old('nombre') == 'Reunión Auditoria 1' ? 'selected' : '' }}>Reunión
+                                            Auditoria 1
                                         </option>
                                         <option value="Slippers Camanchaca"
-                                            {{ old('nombre') == 'Slippers Camanchaca' ? 'selected' : '' }}>Slippers Camanchaca
+                                            {{ old('nombre') == 'Slippers Camanchaca' ? 'selected' : '' }}>Slippers
+                                            Camanchaca
                                         </option>
                                         <option value="Taller Comunitario"
-                                            {{ old('nombre') == 'Taller Comunitario' ? 'selected' : '' }}>Taller Comunitario
+                                            {{ old('nombre') == 'Taller Comunitario' ? 'selected' : '' }}>Taller
+                                            Comunitario
                                         </option>
-                                        <option value="Otros" {{ old('nombre') == 'Otros' ? 'selected' : '' }}>Otros</option>
+                                        <option value="Otros" {{ old('nombre') == 'Otros' ? 'selected' : '' }}>Otros
+                                        </option>
                                     </select>
                                 @endif
                                 @if ($errors->has('nombre'))
@@ -389,7 +421,8 @@
                                         name="avance">
                                         <option value="" selected disabled>Seleccione...</option>
                                         <option value="Ejecutada"
-                                            {{ $actividad->acti_avance == 'Ejecutada' ? 'selected' : '' }}>Ejecutada</option>
+                                            {{ $actividad->acti_avance == 'Ejecutada' ? 'selected' : '' }}>Ejecutada
+                                        </option>
                                         <option value="En avance conforme a plazo"
                                             {{ $actividad->acti_avance == 'En avance conforme a plazo' ? 'selected' : '' }}>
                                             En avance conforme a plazo</option>
@@ -410,7 +443,8 @@
                                         <option value="Ejecutada" {{ old('avance') == 'Ejecutada' ? 'selected' : '' }}>
                                             Ejecutada</option>
                                         <option value="En avance conforme a plazo"
-                                            {{ old('avance') == 'En avance conforme a plazo' ? 'selected' : '' }} selected>En
+                                            {{ old('avance') == 'En avance conforme a plazo' ? 'selected' : '' }} selected>
+                                            En
                                             avance conforme a plazo</option>
                                         <option value="En avance con retraso"
                                             {{ old('avance') == 'En avance con retraso' ? 'selected' : '' }}>En avance con
