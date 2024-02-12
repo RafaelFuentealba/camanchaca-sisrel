@@ -123,7 +123,7 @@
                                         <td>{{ $actividad->acti_avance }}</td>
                                         <td>
                                             <a href="{{ route('admin.actividad.mostrar', $actividad->acti_codigo) }}" class="btn btn-icon btn-primary" data-toggle="tooltip" data-placement="top" title="Ver detalles"><i class="fas fa-eye"></i></a>
-                                            {{-- <a href="{{ route('admin.actividades.evidencia.listar', $actividad->acti_codigo) }}" class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Adjuntar evidencia"><i class="fas fa-paperclip"></i></a> --}}
+                                            <a href="{{ route('admin.actividades.evidencias.listar', $actividad->acti_codigo) }}" class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Adjuntar evidencia"><i class="fas fa-paperclip"></i></a>
                                             <a href="{{ route('admin.actividad.editar', $actividad->acti_codigo) }}" class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
                                             <form action="{{ route('admin.actividad.eliminar', $actividad->acti_codigo) }}" method="POST" style="display: inline-block;">
                                                 @method('DELETE')

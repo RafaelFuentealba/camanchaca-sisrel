@@ -156,6 +156,14 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/actividad/{acti_codigo}/editar', [BitacoraController::class, 'EditarActividad'])->name('admin.actividad.editar');
     Route::put('admin/actividad/{acti_codigo}/editar', [BitacoraController::class, 'ActualizarActividad'])->name('admin.actividad.actualizar');
     Route::delete('admin/actividad/{acti_codigo}/eliminar', [BitacoraController::class, 'EliminarActividad'])->name('admin.actividad.eliminar');
+
+    // inicio rutas evidecias de bitacora
+    Route::get('admin/actividad/{acti_codigo}/evidecias',[BitacoraController::class,'ListarEvidencia'])->name('admin.actividades.evidencias.listar');
+    Route::post('admin/actividad/{inic_codigo}/evidencias', [BitacoraController::class, 'guardarEvidencia'])->name('admin.actividades.evidencia.guardar');
+    Route::post('admin/actividad/evidencia/{acen_codigo}', [BitacoraController::class, 'descargarEvidencia'])->name('admin.actividades.evidencia.descargar');
+    Route::delete('admin/actividad/evidencia/{acen_codigo}', [BitacoraController::class, 'eliminarEvidencia'])->name('admin.actividades.evidencia.eliminar');
+    // fin rutas evidecias de bitacora
+
     Route::get('admin/actividad/listar-participantes', [BitacoraController::class, 'ListarParticipantes']);
     Route::post('admin/actividad/agregar-participante', [BitacoraController::class, 'AgregarParticipante']);
     Route::get('admin/actividad/{acti_codigo}/participantes', [BitacoraController::class, 'EditarParticipantes'])->name('admin.actividad.participantes.editar');

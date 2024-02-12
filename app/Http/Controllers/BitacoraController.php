@@ -16,6 +16,9 @@ use App\Models\Dirigentes;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Entornos;
 use App\Models\Comunas;
+use App\Models\ActividadesEvidencias;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\File;
 
 use Psy\Util\Json;
 use function PHPSTORM_META\type;
@@ -31,9 +34,9 @@ class BitacoraController extends Controller
                 return view('admin.bitacora.listar', [
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                        ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                        ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
                         ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
-                        ->where(['organizaciones.orga_codigo'=>$request->orga_codigo,'comunas.comu_codigo'=>$request->comu_codigo])
+                        ->where(['organizaciones.orga_codigo' => $request->orga_codigo, 'comunas.comu_codigo' => $request->comu_codigo])
                         ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
                         ->get(),
                     'organizaciones' => DB::table('organizaciones')
@@ -52,9 +55,9 @@ class BitacoraController extends Controller
                 return view('admin.bitacora.listar', [
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                        ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                        ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
                         ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
-                        ->where('comunas.comu_codigo',$request->comu_codigo)
+                        ->where('comunas.comu_codigo', $request->comu_codigo)
                         // ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
                         ->get(),
                     'organizaciones' => DB::table('organizaciones')
@@ -69,13 +72,13 @@ class BitacoraController extends Controller
                         ->distinct()
                         ->get()
                 ]);
-            } elseif ($request->comu_codigo != "" && $request->fecha_inicio != "" && $request->fecha_termino != ""){
+            } elseif ($request->comu_codigo != "" && $request->fecha_inicio != "" && $request->fecha_termino != "") {
                 return view('admin.bitacora.listar', [
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                        ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                        ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
                         ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
-                        ->where('comunas.comu_codigo',$request->comu_codigo)
+                        ->where('comunas.comu_codigo', $request->comu_codigo)
                         ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
                         ->get(),
                     'organizaciones' => DB::table('organizaciones')
@@ -90,7 +93,7 @@ class BitacoraController extends Controller
                         ->distinct()
                         ->get()
                 ]);
-            }elseif ($request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio == "" && $request->fecha_termino == "") {
+            } elseif ($request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio == "" && $request->fecha_termino == "") {
                 return view('admin.bitacora.listar', [
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
@@ -110,7 +113,7 @@ class BitacoraController extends Controller
                         ->distinct()
                         ->get()
                 ]);
-            }elseif ($request->comu_codigo=='' &&  $request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+            } elseif ($request->comu_codigo == '' && $request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
                 return view('admin.bitacora.listar', [
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
@@ -342,19 +345,119 @@ class BitacoraController extends Controller
         return redirect()->route('admin.actividad.participantes.editar', $acti_codigo)->with('exitoActividad', 'Los datos de la actividad fueron actualizados correctamente.');
     }
 
-    public function listarEvidencia($acti_codigo)
+    public function ListarEvidencia($acti_codigo)
     {
         $actiVerificar = Actividades::where('acti_codigo', $acti_codigo)->first();
         if (!$actiVerificar)
-            return redirect()->route('admin.actividad.listar')->with('errorIniciativa', 'La actividad no se encuentra registrada en el sistema.');
+            return redirect()->route('admin.actividad.listar')->with('errorActividad', 'La actividad no se encuentra registrada en el sistema.');
 
-        $acenListar = ActividadEvidencias::where(['acti_codigo' => $acti_codigo, 'acen_vigente' => 'S'])->get();
-        return view('admin.iniciativas.evidencias', [
-            'actividades' => $actiVerificar,
+        $acenListar = ActividadesEvidencias::where(['acti_codigo' => $acti_codigo, 'acen_vigente' => 'S'])->paginate(10);
+        return view('admin.bitacora.evidencias', [
+            'actividad' => $actiVerificar,
             'evidencias' => $acenListar
         ]);
     }
 
+    public function guardarEvidencia(Request $request, $acti_codigo)
+    {
+
+        $inicVerificar = Actividades::where('acti_codigo', $acti_codigo)->first();
+        if (!$inicVerificar)
+            return redirect()->route('admin.actividad.listar')->with('errorIniciativa', 'La iniciativa no se encuentra registrada en el sistema.');
+
+        $validarEntradas = Validator::make(
+            $request->all(),
+            [
+                'acen_nombre' => 'required|max:50',
+                // 'acen_descripcion' => 'required|max:500',
+                'acen_archivo' => 'required|max:10000',
+            ],
+            [
+                'acen_nombre.required' => 'El nombre de la evidencia es requerido.',
+                'acen_nombre.max' => 'El nombre de la evidencia excede el máximo de caracteres permitidos (50).',
+                // 'acen_descripcion.required' => 'La descripción de la evidencia es requerida.',
+                // 'acen_descripcion.max' => 'La descripción de la evidencia excede el máximo de caracteres permitidos (500).',
+                'acen_archivo.required' => 'El archivo de la evidencia es requerido.',
+                // 'acen_archivo.mimes' => 'El tipo de archivo no está permitido, intente con un formato de archivo tradicional.',
+                // 'acen_archivo.max' => 'El archivo excede el tamaño máximo permitido (10 MB).'
+            ]
+        );
+        if ($validarEntradas->fails())
+            return redirect()->route('admin.actividades.evidencias.listar', $acti_codigo)->with('errorValidacion', $validarEntradas->errors()->first());
+
+        $inevGuardar = ActividadesEvidencias::insertGetId([
+            'acti_codigo' => $acti_codigo,
+            'acen_nombre' => $request->acen_nombre,
+            // 'inev_tipo' => $request->inev_tipo,
+            // Todo: nuevo campo a la BD
+            'acen_descripcion' => $request->acen_descripcion,
+            'acen_vigente' => 'S',
+            'acen_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'acen_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'acen_rol_mod' => Session::get('admin')->rous_codigo,
+            'acen_rut_mod' => Session::get('admin')->usua_nickname
+        ]);
+        if (!$inevGuardar)
+            redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
+
+        $archivo = $request->file('acen_archivo');
+        $rutaEvidencia = 'files/actividades/' . $inevGuardar;
+        if (File::exists(public_path($rutaEvidencia)))
+            File::delete(public_path($rutaEvidencia));
+        $moverArchivo = $archivo->move(public_path('files/actividades'), $inevGuardar);
+        if (!$moverArchivo) {
+            ActividadesEvidencias::where('acen_codigo', $inevGuardar)->delete();
+            return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
+        }
+
+        $actiActualizar = ActividadesEvidencias::where('acen_codigo', $inevGuardar)->update([
+            'acen_ruta' => 'files/actividades/' . $inevGuardar,
+            'acen_mime' => $archivo->getClientMimeType(),
+            'acen_nombre_origen' => $archivo->getClientOriginalName(),
+            'acen_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'acen_rol_mod' => Session::get('admin')->rous_codigo,
+            'acen_rut_mod' => Session::get('admin')->usua_nickname
+        ]);
+        if (!$actiActualizar)
+            return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
+        return redirect()->route('admin.actividades.evidencias.listar', $acti_codigo)->with('exitoEvidencia', 'La evidencia fue registrada correctamente.');
+
+    }
+
+    public function descargarEvidencia($acen_codigo)
+    {
+        try {
+            $evidencia = ActividadesEvidencias::where('acen_codigo', $acen_codigo)->first();
+            if (!$evidencia)
+                return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
+
+            $archivo = public_path($evidencia->acen_ruta);
+            $cabeceras = array(
+                'Content-Type: ' . $evidencia->acen_mime,
+                'Cache-Control: no-cache, no-store, must-revalidate',
+                'Pragma: no-cache'
+            );
+            return Response::download($archivo, $evidencia->acen_nombre_origen, $cabeceras);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('errorEvidencia', 'Ocurrió un problema al descargar la evidencia, intente más tarde.');
+        }
+    }
+
+    public function eliminarEvidencia($acen_codigo)
+    {
+
+        $evidencia = ActividadesEvidencias::where('acen_codigo', $acen_codigo)->first();
+        if (!$evidencia)
+            return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
+
+        if (File::exists(public_path($evidencia->acen_ruta)))
+            File::delete(public_path($evidencia->acen_ruta));
+        $actiEliminar = ActividadesEvidencias::where('acen_codigo', $acen_codigo)->delete();
+        if (!$actiEliminar)
+            return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al eliminar la evidencia, intente más tarde.');
+        return redirect()->route('admin.actividades.evidencias.listar', $evidencia->acen_codigo)->with('exitoEvidencia', 'La evidencia fue eliminada correctamente.');
+
+    }
     public function EliminarActividad($acti_codigo)
     {
         $asisConsultar = DB::table('asistentes')
