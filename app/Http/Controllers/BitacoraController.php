@@ -473,7 +473,8 @@ class BitacoraController extends Controller
         $asacEliminar = AsistentesActividades::where('acti_codigo', $acti_codigo)->delete();
         $asisEliminar = Asistentes::whereIn('asis_codigo', $asisCodigos)->delete();
         $actiEliminar = Actividades::where('acti_codigo', $acti_codigo)->delete();
-        if (!$asacEliminar || !$asisEliminar || !$actiEliminar)
+        $acenEliminar = ActividadesEvidencias::where('acti_codigo', $acti_codigo)->delete();
+        if (!$asacEliminar || !$asisEliminar || !$actiEliminar || $acenEliminar)
             return redirect()->back()->with('errorActividad', 'Ocurrió un error al eliminar la actividad o algunos de los datos asociados, por favor informar al encargado de registrar y monitorear datos.');
         return redirect()->route('admin.actividad.listar')->with('exitoActividad', 'La actividad fue eliminada correctamente.');
     }
