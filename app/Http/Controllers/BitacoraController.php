@@ -445,18 +445,20 @@ class BitacoraController extends Controller
 
     public function eliminarEvidencia($acen_codigo)
     {
+        try {
+            $evidencia = ActividadesEvidencias::where('acen_codigo', $acen_codigo)->first();
+            if (!$evidencia)
+                return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
 
-        $evidencia = ActividadesEvidencias::where('acen_codigo', $acen_codigo)->first();
-        if (!$evidencia)
-            return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
-
-        if (File::exists(public_path($evidencia->acen_ruta)))
-            File::delete(public_path($evidencia->acen_ruta));
-        $actiEliminar = ActividadesEvidencias::where('acen_codigo', $acen_codigo)->delete();
-        if (!$actiEliminar)
-            return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al eliminar la evidencia, intente más tarde.');
-        return redirect()->route('admin.actividades.evidencias.listar', $evidencia->acen_codigo)->with('exitoEvidencia', 'La evidencia fue eliminada correctamente.');
-
+            if (File::exists(public_path($evidencia->acen_ruta)))
+                File::delete(public_path($evidencia->acen_ruta));
+            $actiEliminar = ActividadesEvidencias::where('acen_codigo', $acen_codigo)->delete();
+            if (!$actiEliminar)
+                return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al eliminar la evidencia, intente más tarde.');
+            return redirect()->route('admin.actividades.evidencias.listar', $evidencia->acti_codigo)->with('exitoEvidencia', 'La evidencia fue eliminada correctamente.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('errorEvidencia', 'Ocurrió un problema al eliminar la evidencia, intente más tarde.');
+        }
     }
     public function EliminarActividad($acti_codigo)
     {
