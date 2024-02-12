@@ -35,7 +35,7 @@ class BitacoraController extends Controller
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                         ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
-                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre','acti_rut_creado','acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
                         ->where(['organizaciones.orga_codigo' => $request->orga_codigo, 'comunas.comu_codigo' => $request->comu_codigo])
                         ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
                         ->get(),
@@ -56,7 +56,7 @@ class BitacoraController extends Controller
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                         ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
-                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->select('orga_nombre', 'acti_codigo','acti_rut_creado', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
                         ->where('comunas.comu_codigo', $request->comu_codigo)
                         // ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
                         ->get(),
@@ -77,7 +77,7 @@ class BitacoraController extends Controller
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                         ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
-                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->select('orga_nombre', 'acti_codigo', 'acti_rut_creado','acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
                         ->where('comunas.comu_codigo', $request->comu_codigo)
                         ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
                         ->get(),
@@ -97,7 +97,7 @@ class BitacoraController extends Controller
                 return view('admin.bitacora.listar', [
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre','acti_rut_creado', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
                         ->where('organizaciones.orga_codigo', $request->orga_codigo)
                         // ->whereBetween('actividades.acti_fecha_cumplimiento', [$request->fecha_inicio, $request->fecha_termino])
                         ->get(),
@@ -117,7 +117,7 @@ class BitacoraController extends Controller
                 return view('admin.bitacora.listar', [
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->select('orga_nombre', 'acti_codigo','acti_rut_creado', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
                         ->where('organizaciones.orga_codigo', $request->orga_codigo)
                         ->whereBetween('actividades.acti_fecha_cumplimiento', [$request->fecha_inicio, $request->fecha_termino])
                         ->get(),
@@ -139,7 +139,7 @@ class BitacoraController extends Controller
         return view('admin.bitacora.listar', [
             'actividades' => DB::table('actividades')
                 ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                ->select('orga_nombre','acti_rut_creado', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
                 ->get(),
             'organizaciones' => DB::table('organizaciones')
                 ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
@@ -277,6 +277,7 @@ class BitacoraController extends Controller
             'acti_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'acti_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'acti_vigente' => 'S',
+            'acti_rut_creado' => Session::get('admin')->usua_rut,
             'acti_rut_mod' => Session::get('admin')->usua_rut,
             'acti_rol_mod' => Session::get('admin')->rous_codigo,
         ]);

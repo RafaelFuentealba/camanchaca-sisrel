@@ -24,6 +24,7 @@ class Actividades extends Model
         'acti_creado',
         'acti_actualizado',
         'acti_vigente',
+        'acti_rut_creado',
         'acti_rut_mod',
         'acti_rol_mod'
     ];

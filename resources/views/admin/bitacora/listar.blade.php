@@ -96,6 +96,7 @@
                                         <th>Nombre</th>
                                         <th>Fecha realización</th>
                                         <th>Fecha cumplimiento</th>
+                                        <th>Creado por</th>
                                         <th>Avance</th>
                                         <th>Acciones</th>
                                     </tr>
@@ -120,6 +121,7 @@
                                             echo $fecha;
                                             ?>
                                         </td>
+                                        <td>{{ $actividad->acti_rut_creado }}</td>
                                         <td>{{ $actividad->acti_avance }}</td>
                                         <td>
                                             <a href="{{ route('admin.actividad.mostrar', $actividad->acti_codigo) }}" class="btn btn-icon btn-primary" data-toggle="tooltip" data-placement="top" title="Ver detalles"><i class="fas fa-eye"></i></a>
