@@ -35,13 +35,41 @@ class HomeController extends Controller
         $cantidadIniciativas = Iniciativas::where('inic_vigente', 'S')
             ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
             ->join('unidades', 'unidades.unid_codigo', 'iniciativas_unidades.unid_codigo')
-            ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
         $cantidadOrganizaciones = Organizaciones::where('orga_vigente', 'S')->leftjoin('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
             ->leftjoin('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
+            ->leftjoin('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo');
+
+        $cantidadActividades = Actividades::where('acti_vigente', 'S')->join('unidades', 'unidades.unid_codigo', 'actividades.unid_codigo')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'actividades.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+
+        $cantidadDonaciones = Donaciones::where('dona_vigente', 'S')
+            ->join('comunas', 'comunas.comu_codigo', 'donaciones.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
+            ->leftjoin('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
+            ->leftjoin('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo');
+
+        $actividadesOrganizaciones = Actividades::where('acti_vigente', 'S')
+            ->join('organizaciones', 'organizaciones.orga_codigo', 'actividades.orga_codigo')
+            ->join('unidades', 'unidades.unid_codigo', 'actividades.unid_codigo')
             ->leftjoin('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
-            ->leftjoin('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+            ->join('comunas', 'comunas.comu_codigo', 'actividades.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
+
+        $iniciativasOrganizaciones = Iniciativas::where('inic_vigente', 'S')
+            ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
+            ->join('unidades', 'unidades.unid_codigo', 'iniciativas_unidades.unid_codigo')
+            ->leftjoin('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
+            ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+            ->select('organizaciones.orga_codigo');
+
         $costosDinero = CostosDinero::select(DB::raw('IFNULL(sum(codi_valorizacion), 0) as total'))->where('codi_vigente', 'S')
             ->join('iniciativas', 'iniciativas.inic_codigo', 'costos_dinero.inic_codigo')
             ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
@@ -83,6 +111,14 @@ class HomeController extends Controller
 
             $cantidadOrganizaciones->where('regiones.regi_codigo', $filtro_region);
 
+            $cantidadActividades->where('regiones.regi_codigo', $filtro_region);
+
+            $cantidadDonaciones->where('regiones.regi_codigo', $filtro_region);
+
+            $actividadesOrganizaciones->where('regiones.regi_codigo', $filtro_region);
+
+            $iniciativasOrganizaciones->where('regiones.regi_codigo', $filtro_region);
+
             $costosDinero->where('regiones.regi_codigo', $filtro_region);
 
             $costosEspecies->where('regiones.regi_codigo', $filtro_region);
@@ -101,6 +137,14 @@ class HomeController extends Controller
 
             $cantidadOrganizaciones->where('divisiones.divi_codigo', $filtro_division);
 
+            $cantidadActividades->where('divisiones.divi_codigo', $filtro_division);
+
+            $cantidadDonaciones->where('divisiones.divi_codigo', $filtro_division);
+
+            $actividadesOrganizaciones->where('divisiones.divi_codigo', $filtro_division);
+
+            $iniciativasOrganizaciones->where('divisiones.divi_codigo', $filtro_division);
+
             $costosDinero->where('divisiones.divi_codigo', $filtro_division);
 
             $costosEspecies->where('divisiones.divi_codigo', $filtro_division);
@@ -116,6 +160,10 @@ class HomeController extends Controller
 
         $cantidadIniciativas = $cantidadIniciativas->count(DB::raw('DISTINCT iniciativas.inic_codigo'));
         $cantidadOrganizaciones = $cantidadOrganizaciones->count(DB::raw('DISTINCT organizaciones.orga_codigo'));
+        $cantidadActividades = $cantidadActividades->count();
+        $cantidadDonaciones = $cantidadDonaciones->count();
+        $actividadesOrganizaciones = $actividadesOrganizaciones->count(DB::raw('DISTINCT organizaciones.orga_codigo'));
+        $iniciativasOrganizaciones = $iniciativasOrganizaciones->count(DB::raw('DISTINCT organizaciones.orga_codigo'));
         $costosDinero = $costosDinero->first()->total;
         $costosEspecies = $costosEspecies->first()->total;
         $costosInfra = $costosInfra->first()->total;
@@ -142,6 +190,10 @@ class HomeController extends Controller
         return view('admin.dashboard.dashboardgeneral', [
             'iniciativas' => $cantidadIniciativas,
             'organizaciones' => $cantidadOrganizaciones,
+            'donaciones' => $cantidadDonaciones,
+            'organizacionesAct' => $actividadesOrganizaciones,
+            'organizacionesIni' => $iniciativasOrganizaciones,
+            'actividades' => $cantidadActividades,
             'inversion' => $costosDinero + $costosEspecies + $costosInfra + $costosRrhh + $costosDonaciones,
             'ods' => $cantidadODS,
             'objetivos' => $objetivosDesarrollo,
@@ -179,13 +231,10 @@ class HomeController extends Controller
                     ->orWhereBetween('inic_fecha_fin', [$fechaInicio, $fechaFinal]);
             });
 
-
-        // ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
         $actividadesCantidad = Actividades::select('acti_codigo')
             ->join('comunas', 'comunas.comu_codigo', 'actividades.comu_codigo')
             ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
-            // ->join('tipo_unidades', 'tipo_unidades.tuni_codigo', 'unidades.tuni_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
             ->whereBetween('acti_creado', [$fechaInicio, $fechaFinal]);
 
@@ -194,7 +243,6 @@ class HomeController extends Controller
             ->join('comunas', 'comunas.comu_codigo', 'actividades.comu_codigo')
             ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
-            // ->join('tipo_unidades', 'tipo_unidades.tuni_codigo', 'unidades.tuni_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
             ->whereBetween('actividades.acti_creado', [$fechaInicio, $fechaFinal]);
 
@@ -202,7 +250,6 @@ class HomeController extends Controller
             ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
             ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
-            // ->join('tipo_unidades', 'tipo_unidades.tuni_codigo', 'unidades.tuni_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
             ->whereBetween('organizaciones.orga_creado', [$fechaInicio, $fechaFinal]);
 
@@ -210,7 +257,6 @@ class HomeController extends Controller
             ->join('comunas', 'comunas.comu_codigo', 'donaciones.comu_codigo')
             ->join('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
-            // ->join('tipo_unidades', 'tipo_unidades.tuni_codigo', 'unidades.tuni_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
             ->whereBetween('donaciones.dona_creado', [$fechaInicio, $fechaFinal]);
 
@@ -231,14 +277,6 @@ class HomeController extends Controller
             $costosDonaciones->where('comunas.comu_nombre', $comuna);
         }
 
-        // if ($tipo_unidad != null || $tipo_unidad != '') {
-        //     $iniciativasCantidad->where('tipo_unidades.tuni_codigo', $tipo_unidad);
-        //     $actividadesCantidad->where('tipo_unidades.tuni_codigo', $tipo_unidad);
-        //     $organizacionesCantidadActividades->where('tipo_unidades.tuni_codigo', $tipo_unidad);
-        //     $organizacionesCantidad->where('tipo_unidades.tuni_codigo', $tipo_unidad);
-        //     $costosDonaciones->where('tipo_unidades.tuni_codigo', $tipo_unidad);
-        // }
-
         if ($division != null || $division != '') {
             $iniciativasCantidad->where('divisiones.divi_nombre', $division);
             $actividadesCantidad->where('divisiones.divi_nombre', $division);
@@ -258,30 +296,9 @@ class HomeController extends Controller
         $organizacionesCantidadActividades = $organizacionesCantidadActividades->distinct()->get();
 
 
-
-        // Obtén el HTML de la vista que contiene el gráfico y otros elementos
-        // $html = view(
-        //     'observador.dashboard.reporte',
-        //     compact(
-        //         'iniciativasCantidad',
-        //         'actividadesCantidad',
-        //         'organizacionesCantidadActividades',
-        //         'organizacionesCantidad',
-        //         'costosDonaciones',
-        //         'organizacionesByComunas'
-        //     )
-        // )->render();
-
-        // $pdf = PDF::loadHTML($html);
-
-        // $pdf->setPaper('A4', 'portrait');
-
-        // Descarga o muestra el PDF al navegador
-        // return $pdf->stream('reporte.pdf');
-
         $fechaInicio = Carbon::parse($fechaInicio)->format('d-m-Y');
         $fechaFinal = Carbon::parse($fechaFinal)->format('d-m-Y');
-        return view('admin.dashboard.reporte', compact('fechaInicio','fechaFinal','iniciativasCantidad', 'organizacionesByComunas', 'actividadesCantidad', 'organizacionesCantidadActividades', 'organizacionesCantidad', 'costosDonaciones'));
+        return view('admin.dashboard.reporte', compact('fechaInicio', 'fechaFinal', 'iniciativasCantidad', 'organizacionesByComunas', 'actividadesCantidad', 'organizacionesCantidadActividades', 'organizacionesCantidad', 'costosDonaciones'));
     }
     function estaditicasNacionales()
     {

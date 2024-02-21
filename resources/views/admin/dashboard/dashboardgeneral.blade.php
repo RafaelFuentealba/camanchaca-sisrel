@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-12">
                             <div class="card card-statistic-2">
                                 <div class="card-icon l-bg-cyan">
                                     <i class="fab fa-slack"></i>
@@ -70,7 +70,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-12">
                             <div class="card card-statistic-2">
                                 <div class="card-icon l-bg-green">
                                     <i class="fas fa-hotel"></i>
@@ -87,7 +87,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-12">
                             <div class="card card-statistic-2">
                                 <div class="card-icon l-bg-orange">
                                     <i class="fas fa-dollar-sign"></i>
@@ -98,11 +100,11 @@
                                             <h3 class="font-light mb-0" data-toggle="tooltip" data-placement="right"
                                                 title="{{ '$' . number_format($inversion, 0, ',', '.') }}">
                                                 <i class="ti-arrow-up text-success"></i>
-                                                @if ($inversion > 1000000)
+                                                {{-- @if ($inversion > 1000000)
                                                     {{ number_format($inversion / 1000000, 1) . ' M' }}
-                                                @else
+                                                @else --}}
                                                     {{ '$' . number_format($inversion, 0, ',', '.') }}
-                                                @endif
+                                                {{-- @endif --}}
                                             </h3>
                                             <h6 class="text-muted">Inversión</h6>
                                         </div>
@@ -127,6 +129,80 @@
                                 </div>
                             </div>
                         </div> --}}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                            <div class="card card-statistic-2">
+                                <div class="card-icon l-bg-red">
+                                    <i class="fas fa-hotel"></i>
+                                </div>
+                                <div class="card-wrap">
+                                    <div class="padding-20">
+                                        <div class="text-right">
+                                            <h3 class="font-light mb-0">
+                                                <i class="ti-arrow-up text-success"></i> {{ $organizacionesAct }}
+                                            </h3>
+                                            <h6 class="text-muted">Organizaciones en actividades</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                            <div class="card card-statistic-2">
+                                <div class="card-icon l-bg-blue">
+                                    <i class="fas fa-hotel"></i>
+                                </div>
+                                <div class="card-wrap">
+                                    <div class="padding-20">
+                                        <div class="text-right">
+                                            <h3 class="font-light mb-0">
+                                                <i class="ti-arrow-up text-success"></i> {{ $organizacionesIni }}
+                                            </h3>
+                                            <h6 class="text-muted">Organizaciones en iniciativas</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                            <div class="card card-statistic-2">
+                                <div class="card-icon l-bg-red">
+                                    <i class="fas fa-clipboard"></i>
+                                </div>
+                                <div class="card-wrap">
+                                    <div class="padding-20">
+                                        <div class="text-right">
+                                            <h3 class="font-light mb-0">
+                                                <i class="ti-arrow-up text-success"></i> {{ $actividades }}
+                                            </h3>
+                                            <h6 class="text-muted">Actividades</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+                            <div class="card card-statistic-2">
+                                <div class="card-icon l-bg-green">
+                                    <i class="fas fa-donate"></i>
+                                </div>
+                                <div class="card-wrap">
+                                    <div class="padding-20">
+                                        <div class="text-right">
+                                            <h3 class="font-light mb-0">
+                                                <i class="ti-arrow-up text-success"></i> {{ $donaciones }}
+                                            </h3>
+                                            <h6 class="text-muted">Cantidad de donaciones</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
