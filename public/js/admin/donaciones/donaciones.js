@@ -5,6 +5,7 @@ $(document).ready(function(){
    $("#organizacion").hide();
    $("#comu_dona").hide();
    $("#orga_dona").hide();
+   $("#comunas").hide();
    $("#div-select-dirigentes").hide();
 });
 
@@ -47,6 +48,10 @@ function MostrarDirigentes(){
 
 function cargarComuna(){
     $('#comu_dona').val($("#comu_codigo").val())
+}
+
+function cargarComunaEdit(){
+    $('#comunas').val($("#comu").val())
 }
 function cargarOrga(){
     $('#orga_dona').val($("#orga_codigo").val())

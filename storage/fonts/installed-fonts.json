@@ -5,5 +5,11 @@
     "font awesome 5 free": {
         "normal": "\/home\/eliacer\/Repositorios\/camanchaca-sisrel\/storage\/fonts\/font_awesome_5_free_normal_0a6c7bbd072456c13c17204c8bd725d1",
         "900": "font_awesome_5_free_900_ce4f9386f6860c537a9ffddd3236d05e"
+    },
+    "glyphicons halflings": {
+        "normal": "glyphicons_halflings_normal_448cf7c5a9f8cf5b480d96c9606cc001"
+    },
+    "fontawesome": {
+        "normal": "fontawesome_normal_af67e54a0f5dfe8a4804f49aa902750d"
     }
 }

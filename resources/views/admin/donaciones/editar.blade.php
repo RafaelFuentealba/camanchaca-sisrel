@@ -32,8 +32,8 @@
                                 <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Organización</label>
-                                        <select class="form-control select2" id="orga_codigo" name="orga_codigo" style="width: 100%"
-                                            onchange="cargarDirigentes()">
+                                        <select class="form-control select2" id="orga_codigo" name="orga_codigo"
+                                            style="width: 100%" onchange="cargarDirigentes()">
                                             <option value="" selected disabled>Seleccione...</option>
                                             @forelse ($organizaciones as $organizacion)
                                                 <option value="{{ $organizacion->orga_codigo }}"
@@ -49,7 +49,34 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xl-4 col-md-4 col-lg-4" id="div-select-dirigentes"
+                                <div class="col-xl-3 col-md-3 col-lg-3">
+
+                                    <div class="form-group ">
+                                        <label for="comu">Comuna</label>
+                                        <div class="input-group">
+                                            <select class="form-control select2" name="comu" id="comu" style="width: 100%" onchange="cargarComunaEdit()">
+                                                <option value="" selected disabled>Seleccione...</option>
+                                                @foreach ($comunas as $comuna)
+                                                    <option value="{{ $comuna->comu_codigo }}"
+                                                        {{ $donacion->comu_codigo == $comuna->comu_codigo ? 'selected' : '' }}>
+                                                        {{ $comuna->comu_nombre }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @if ($errors->has('comu_codigo'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2 text-center">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('comu_codigo') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-md-3 col-lg-3" id="div-select-dirigentes"
                                     name="div-select-dirigentes">
                                     <div class="form-group">
                                         <label>Dirigente</label>
@@ -75,6 +102,15 @@
                                     <input type="text" class="form-control " id="organizacion" name="organizacion"
                                         value="">
                                 @endif
+
+                                @if (isset($donacion))
+                                    <input type="text" class="form-control " id="comunas" name="comunas"
+                                        value="{{ $donacion->comu_codigo }}">
+                                @else
+                                    <input type="text" class="form-control " id="comunas" name="comunas"
+                                        value="">
+                                @endif
+
                                 <div class="row">
                                     <div class="col-xl-1"></div>
                                     <div class="col-xl-3 col-md-3 col-lg-3">

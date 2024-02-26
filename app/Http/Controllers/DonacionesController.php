@@ -209,7 +209,8 @@ class DonacionesController extends Controller
                 'dona_declaracion_jurada' => 'required',
                 'dona_tipo_aporte' => 'required',
                 'dona_descripcion' => 'max:400',
-                'pila_codigo' => 'required'
+                'pila_codigo' => 'required',
+                'comunas' => 'required',
 
             ],
             [
@@ -229,7 +230,8 @@ class DonacionesController extends Controller
                 'dona_declaracion_jurada.required' => 'El estado de la declaración jurada es requerido.',
                 'dona_tipo_aporte.required' => 'El tipo de aporte es requerido.',
                 'dona_descripcion.required' => 'La descripción supera el máximo de carácteres permitidos.',
-                'pila_codigo.required' => 'Es necesario asiganar un pilar a la donación.'
+                'pila_codigo.required' => 'Es necesario asiganar un pilar a la donación.',
+                'comunas.required' => 'Es obligatorio ingresar la comuna.'
             ]
         );
 
@@ -239,6 +241,7 @@ class DonacionesController extends Controller
 
         $donacion = Donaciones::where(['dona_codigo' => $dona_codigo])->update([
             'orga_codigo' => $request->organizacion,
+            'comu_codigo' => $request->comunas,
             'pila_codigo' => $request->pila_codigo,
             'dona_motivo' => $request->dona_motivo,
             'diri_codigo' => $request->dirigente,
