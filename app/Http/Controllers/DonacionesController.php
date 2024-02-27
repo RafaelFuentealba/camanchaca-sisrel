@@ -24,10 +24,7 @@ class DonacionesController extends Controller
     {
         //TODO: Filtro de comunas en donaciones
         $donaciones = null;
-        $comunas = DB::table('comunas')->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
-            ->join('donaciones', 'donaciones.orga_codigo', 'organizaciones.orga_codigo')
-            ->distinct()
-            ->get();
+        $comunas = Comunas::select('comu_codigo','comu_nombre')->get();
         ;
         $organizaciones = DB::table('donaciones')
             ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
