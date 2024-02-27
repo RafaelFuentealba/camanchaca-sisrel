@@ -206,8 +206,8 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="col-xl-6">
+                        <div class="col-2"></div>
+                        <div class="col-xl-8">
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Filtrar por</h4>
@@ -216,7 +216,7 @@
                                 <div class="card-body">
                                     <form action="{{ route('admin.dbgeneral.index') }}" method="GET">
                                         <div class="row">
-                                            <div class="col-xl-6 col-md-6 col-lg-6">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="region">Región</label>
                                                     <select name="region" id="region" class="form-control select2"
@@ -233,7 +233,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-xl-6 col-md-6 col-lg-6">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="division">División</label>
                                                     <select name="division" id="division" class="form-control select2"
@@ -245,6 +245,21 @@
                                                                 {{ $division->divi_nombre }}</option>
                                                         @empty
                                                             <option value="-1">No existen registros</option>
+                                                        @endforelse
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-3 col-md-3 col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="anho">Año</label>
+                                                    <select name="anho" id="anho" class="form-control select2"
+                                                        style="width: 100%">
+                                                        <option value="">Seleccione...</option>
+                                                        @forelse ($anhos as $anho )
+                                                            <option value="{{$anho}}" {{Request::get('anho') == $anho ? 'selected' : ''}}>{{$anho}}</option>
+                                                        @empty
+                                                            <option value="" disabled>No hay registros</option>
                                                         @endforelse
                                                     </select>
                                                 </div>

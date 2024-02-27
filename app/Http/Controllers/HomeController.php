@@ -32,7 +32,9 @@ class HomeController extends Controller
 
         $filtro_region = $request->region;
         $filtro_division = $request->division;
-        // return $filtro_region;
+        $filtro_fecha = $request->anho;
+
+        $anhos = Iniciativas::select(DB::raw('YEAR(inic_creado) as year'))->distinct()->pluck('year');
         $cantidadIniciativas = Iniciativas::where('inic_vigente', 'S')
             ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
             ->join('unidades', 'unidades.unid_codigo', 'iniciativas_unidades.unid_codigo')
@@ -166,6 +168,32 @@ class HomeController extends Controller
             $inviIniciativas->where('divisiones.divi_codigo', $filtro_division);
         }
 
+        if ($filtro_fecha != null) {
+            $cantidadIniciativas->whereRaw('YEAR(iniciativas.inic_creado) = ?', [$filtro_fecha]);
+
+            $cantidadOrganizaciones->whereRaw('YEAR(organizaciones.orga_creado) = ?', [$filtro_fecha]);
+
+            $cantidadActividades->whereRaw('YEAR(actividades.acti_creado) = ?', [$filtro_fecha]);
+
+            $cantidadDonaciones->whereRaw('YEAR(donaciones.dona_creado) = ?', [$filtro_fecha]);
+
+            $actividadesOrganizaciones->whereRaw('YEAR(organizaciones.orga_creado) = ?', [$filtro_fecha]);
+
+            $iniciativasOrganizaciones->whereRaw('YEAR(iniciativas.inic_creado) = ?', [$filtro_fecha]);
+
+            $costosDinero->whereRaw('YEAR(costos_dinero.codi_creado) = ?', [$filtro_fecha]);
+
+            $costosEspecies->whereRaw('YEAR(costos_especies.coes_creado) = ?', [$filtro_fecha]);
+
+            $costosInfra->whereRaw('YEAR(costos_infraestructura.coin_creado) = ?', [$filtro_fecha]);
+
+            $costosRrhh->whereRaw('YEAR(costos_rrhh.corh_creado) = ?', [$filtro_fecha]);
+
+            $costosDonaciones->whereRaw('YEAR(donaciones.dona_fecha_entrega) = ?', [$filtro_fecha]);
+
+            $inviIniciativas->whereRaw('YEAR(iniciativas.inic_creado) = ?', [$filtro_fecha]);
+        }
+
         $cantidadIniciativas = $cantidadIniciativas->count(DB::raw('DISTINCT iniciativas.inic_codigo'));
         $cantidadOrganizaciones = $cantidadOrganizaciones->count(DB::raw('DISTINCT organizaciones.orga_codigo'));
         $cantidadActividades = $cantidadActividades->count();
@@ -214,6 +242,7 @@ class HomeController extends Controller
             'divisiones' => $divisiones,
             // 'tipoUnidades' => $tipoUnidades,
             'comunas' => $comunas,
+            'anhos' => $anhos
         ]);
     }
 
