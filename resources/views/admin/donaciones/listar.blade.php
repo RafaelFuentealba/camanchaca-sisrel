@@ -116,44 +116,55 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($donaciones as $donacion)
-                                            <tr>
-                                                <!-- <td>{{ $donacion->dona_codigo }}</td> -->
-                                                <td>{{ $donacion->orga_nombre }}</td>
-                                                <td>{{ $donacion->dona_motivo }}</td>
-                                                <td>{{ $donacion->dona_nombre_solicitante }}</td>
-                                                <td>{{ $donacion->dona_persona_recepciona }}</td>
-                                                <td>{{ '$' . number_format($donacion->dona_monto, 0, ',', '.') }}</td>
-                                                <td>
-                                                    <?php
-                                                    setlocale(LC_TIME, 'spanish');
-                                                    $fecha = ucwords(strftime('%d-%m-%Y', strtotime($donacion->dona_fecha_entrega)));
-                                                    echo $fecha;
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <a href="{{ route('admin.donaciones.info', $donacion->dona_codigo) }}"
-                                                        class="btn btn-icon btn-primary" data-toggle="tooltip"
-                                                        data-placement="top" title="Ver detalles"><i
-                                                            class="fas fa-eye"></i></a>
-                                                    <a href="{{ route('admin.donaciones.evidencias.listar', $donacion->dona_codigo) }}"
-                                                        class="btn btn-icon btn-warning" data-toggle="tooltip"
-                                                        data-placement="top" title="Adjuntar evidencia"><i
-                                                            class="fas fa-paperclip"></i></a>
-                                                    <a href="{{ route('admin.donaciones.editar', $donacion->dona_codigo) }}"
-                                                        class="btn btn-icon btn-warning" data-toggle="tooltip"
-                                                        data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
-                                                    <form
-                                                        action="{{ route('admin.donaciones.eliminar', $donacion->dona_codigo) }}"
-                                                        method="POST" style="display: inline-block">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-icon btn-danger"><i
-                                                                class="fas fa-trash" data-toggle="tooltip"
-                                                                data-placement="top" title="Eliminar"></i></button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                        @if ($donaciones != null)
+                                            @foreach ($donaciones as $donacion)
+                                                <tr>
+                                                    <!-- <td>{{ $donacion->dona_codigo }}</td> -->
+                                                    <td>{{ $donacion->orga_nombre }}</td>
+                                                    <td>{{ $donacion->dona_motivo }}</td>
+                                                    <td>{{ $donacion->dona_nombre_solicitante }}</td>
+                                                    <td>{{ $donacion->dona_persona_recepciona }}</td>
+                                                    <td>{{ '$' . number_format($donacion->dona_monto, 0, ',', '.') }}</td>
+                                                    <td>
+                                                        <?php
+                                                        setlocale(LC_TIME, 'spanish');
+                                                        $fecha = ucwords(strftime('%d-%m-%Y', strtotime($donacion->dona_fecha_entrega)));
+                                                        echo $fecha;
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ route('admin.donaciones.info', $donacion->dona_codigo) }}"
+                                                            class="btn btn-icon btn-primary" data-toggle="tooltip"
+                                                            data-placement="top" title="Ver detalles"><i
+                                                                class="fas fa-eye"></i></a>
+                                                        <a href="{{ route('admin.donaciones.evidencias.listar', $donacion->dona_codigo) }}"
+                                                            class="btn btn-icon btn-warning" data-toggle="tooltip"
+                                                            data-placement="top" title="Adjuntar evidencia"><i
+                                                                class="fas fa-paperclip"></i></a>
+                                                        <a href="{{ route('admin.donaciones.editar', $donacion->dona_codigo) }}"
+                                                            class="btn btn-icon btn-warning" data-toggle="tooltip"
+                                                            data-placement="top" title="Editar"><i
+                                                                class="fas fa-edit"></i></a>
+                                                        <form
+                                                            action="{{ route('admin.donaciones.eliminar', $donacion->dona_codigo) }}"
+                                                            method="POST" style="display: inline-block">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-icon btn-danger"><i
+                                                                    class="fas fa-trash" data-toggle="tooltip"
+                                                                    data-placement="top" title="Eliminar"></i></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <td>No hay registros</td>
+                                            <td>No hay registros</td>
+                                            <td>No hay registros</td>
+                                            <td>No hay registros</td>
+                                            <td>No hay registros</td>
+                                            <td>No hay registros</td>
+                                            <td>No hay registros</td>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
