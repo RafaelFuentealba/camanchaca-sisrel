@@ -113,7 +113,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if ($actividaes != null)
+                                        @if ($actividades != null)
                                             <tr>
                                                 @foreach ($actividades as $actividad)
                                                     <td>{{ $actividad->acti_codigo }}</td>

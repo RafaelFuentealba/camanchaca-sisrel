@@ -55,6 +55,11 @@
                                                 <td width="20%"><strong>Nombre organización</strong></td>
                                                 <td>{{ $donacion->orga_nombre }}</td>
                                             </tr>
+
+                                            <tr>
+                                                <td width="20%"><strong>Comuna</strong></td>
+                                                <td>{{ $donacion->comu_nombre }}</td>
+                                            </tr>
                                             <tr>
                                                 <td><strong>Motivo de la donación</strong></td>
                                                 <td>{{ $donacion->dona_motivo }}</td>

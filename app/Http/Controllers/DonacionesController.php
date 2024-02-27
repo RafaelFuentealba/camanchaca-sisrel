@@ -86,7 +86,8 @@ class DonacionesController extends Controller
         $donacion = DB::table('donaciones')
             ->join('pilares', 'pilares.pila_codigo', '=', 'donaciones.pila_codigo')
             ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-            ->select('pilares.*', 'organizaciones.*', 'donaciones.*')
+            ->join('comunas','comunas.comu_codigo','donaciones.comu_codigo')
+            ->select('pilares.*', 'organizaciones.*', 'donaciones.*','comunas.comu_nombre')
             ->where('donaciones.dona_codigo', '=', $dona_codigo)
             ->first();
 
