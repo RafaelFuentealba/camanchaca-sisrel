@@ -17,7 +17,7 @@ class Donaciones extends Model
         'orga_codigo',
         'pila_codigo',
         'diri_codigo',
-
+        'comu_codigo',
         'dona_codigo',
         'dona_motivo',
         'dona_nombre_solicitante',
