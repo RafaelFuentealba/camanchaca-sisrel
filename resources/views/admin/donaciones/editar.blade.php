@@ -5,8 +5,8 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-xl3"></div>
-                        <div class="col-xl6">
+                        <div class="col-xl-3"></div>
+                        <div class="col-xl-6">
                             @if (Session::has('errorDonacion'))
                                 <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
@@ -20,8 +20,11 @@
                     </div>
                     <div class="card">
                         <div class="card-header">
-                            <h4>Agregar donación</h4>
+                            <h4>Modificar donación</h4>
                             <div class="card-header-action">
+                                <a href="{{ route('admin.donaciones.listar') }}" type="button" class="btn btn-success"
+                                    title="Ir a lista"><i class="fas fa-backward"></i> Ir a
+                                    donaciones</a>
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#modalCrearOrga"><i class="fas fa-plus"></i> Nueva Organización</button>
                             </div>
@@ -54,7 +57,8 @@
                                     <div class="form-group ">
                                         <label for="comu">Comuna</label>
                                         <div class="input-group">
-                                            <select class="form-control select2" name="comu" id="comu" style="width: 100%" onchange="cargarComunaEdit()">
+                                            <select class="form-control select2" name="comu" id="comu"
+                                                style="width: 100%" onchange="cargarComunaEdit()">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @foreach ($comunas as $comuna)
                                                     <option value="{{ $comuna->comu_codigo }}"

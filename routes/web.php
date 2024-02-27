@@ -160,9 +160,16 @@ Route::middleware('verificar.admin')->group(function () {
     // inicio rutas evidecias de bitacora
     Route::get('admin/actividad/{acti_codigo}/evidecias',[BitacoraController::class,'ListarEvidencia'])->name('admin.actividades.evidencias.listar');
     Route::post('admin/actividad/{inic_codigo}/evidencias', [BitacoraController::class, 'guardarEvidencia'])->name('admin.actividades.evidencia.guardar');
-    Route::post('admin/actividad/evidencia/{acen_codigo}', [BitacoraController::class, 'descargarEvidencia'])->name('admin.actividades.evidencia.descargar');
-    Route::delete('admin/actividad/evidencia/{acen_codigo}', [BitacoraController::class, 'eliminarEvidencia'])->name('admin.actividades.evidencia.eliminar');
+    Route::post('admin/actividad/evidencia/{acen_codigo}/descargar', [BitacoraController::class, 'descargarEvidencia'])->name('admin.actividades.evidencia.descargar');
+    Route::delete('admin/actividad/evidencia/{acen_codigo}/elimnar', [BitacoraController::class, 'eliminarEvidencia'])->name('admin.actividades.evidencia.eliminar');
     // fin rutas evidecias de bitacora
+
+    // inicio rutas evidecias de donaciones
+    Route::get('admin/donaciones/{doma_codigo}/evidecias',[DonacionesController::class,'ListarEvidencia'])->name('admin.donaciones.evidencias.listar');
+    Route::post('admin/donaciones/{dona_codigo}/evidencias', [DonacionesController::class, 'GuardarEvidencia'])->name('admin.donaciones.evidencia.guardar');
+    Route::post('admin/donaciones/evidencia/{doen_codigo}/descargar', [DonacionesController::class, 'descargarEvidencia'])->name('admin.donaciones.evidencia.descargar');
+    Route::delete('admin/donaciones/evidencia/{doen_codigo}/eliminar', [DonacionesController::class, 'eliminarEvidencia'])->name('admin.donaciones.evidencia.eliminar');
+    // fin rutas evidecias de donaciones
 
     Route::get('admin/actividad/listar-participantes', [BitacoraController::class, 'ListarParticipantes']);
     Route::post('admin/actividad/agregar-participante', [BitacoraController::class, 'AgregarParticipante']);

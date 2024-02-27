@@ -3,6 +3,7 @@
 /public/storage
 /public/files/evidencias
 /public/files/actividades
+/public/files/donaciones
 /storage/*.key
 .env.backup
 /vendor

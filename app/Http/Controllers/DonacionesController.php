@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comunas;
 use App\Models\Dirigentes;
 use App\Models\DirigentesOrganizaciones;
+use App\Models\DonacionesEvidencias;
 use App\Models\Entornos;
 use Illuminate\Support\Facades\Session;
 use App\Models\Organizaciones;
@@ -13,6 +14,9 @@ use App\Models\Donaciones;
 use App\Models\Pilares;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 
 class DonacionesController extends Controller
 {
@@ -269,6 +273,125 @@ class DonacionesController extends Controller
         return redirect()->back()->with('errorDonacion', 'Ocurrió un error al actualizar la donación');
     }
 
+    function ListarEvidencia($dona_codigo)
+    {
+        $donaVerificar = Donaciones::where('dona_codigo', $dona_codigo)->first();
+        if (!$donaVerificar) {
+            return redirect()->route('admin.donaciones.listar')->with('errorDonacion', 'La donación no se encuentra registrada en el sistema, o presenta errores.');
+        }
+
+        $doenListar = DonacionesEvidencias::where(['dona_codigo' => $dona_codigo, 'doen_vigente' => 'S'])->paginate(10);
+        return view('admin.donaciones.evidencias', [
+            'donacion' => $donaVerificar,
+            'evidencias' => $doenListar
+        ]);
+    }
+
+    function GuardarEvidencia(Request $request, $dona_codigo)
+    {
+        $donaVerificar = Donaciones::where('dona_codigo', $dona_codigo)->first();
+        if (!$donaVerificar) {
+            return redirect()->route('admin.donaciones.evidencias.listar')->with('errorDonacion', 'La donación no se encuentra registrada en el sistema, o presenta errores.');
+        }
+
+        $validarEntradas = Validator::make(
+            $request->all(),
+            [
+                'doen_nombre' => 'required|max:50',
+                // 'doen_descripcion' => 'required|max:500',
+                'doen_archivo' => 'required|max:10000',
+            ],
+            [
+                'doen_nombre.required' => 'El nombre de la evidencia es requerido.',
+                'doen_nombre.max' => 'El nombre de la evidencia excede el máximo de caracteres permitidos (50).',
+                // 'doen_descripcion.required' => 'La descripción de la evidencia es requerida.',
+                // 'doen_descripcion.max' => 'La descripción de la evidencia excede el máximo de caracteres permitidos (500).',
+                'doen_archivo.required' => 'El archivo de la evidencia es requerido.',
+                // 'doen_archivo.mimes' => 'El tipo de archivo no está permitido, intente con un formato de archivo tradicional.',
+                // 'doen_archivo.max' => 'El archivo excede el tamaño máximo permitido (10 MB).'
+            ]
+        );
+        if ($validarEntradas->fails())
+            return redirect()->route('admin.donaciones.evidencias.listar', $dona_codigo)->with('errorValidacion', $validarEntradas->errors()->first());
+
+        if ($validarEntradas->fails())
+            return redirect()->route('admin.actividades.evidencias.listar', $dona_codigo)->with('errorValidacion', $validarEntradas->errors()->first());
+
+        $doneGuardar = DonacionesEvidencias::insertGetId([
+            'dona_codigo' => $dona_codigo,
+            'doen_nombre' => $request->doen_nombre,
+            // 'inev_tipo' => $request->inev_tipo,
+            // Todo: nuevo campo a la BD
+            'doen_descripcion' => $request->doen_descripcion,
+            'doen_vigente' => 'S',
+            'doen_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'doen_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'doen_rol_mod' => Session::get('admin')->rous_codigo,
+            'doen_rut_mod' => Session::get('admin')->usua_nickname
+        ]);
+        if (!$doneGuardar)
+            redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
+
+        $archivo = $request->file('doen_archivo');
+        $rutaEvidencia = 'files/donaciones/' . $doneGuardar;
+        if (File::exists(public_path($rutaEvidencia)))
+            File::delete(public_path($rutaEvidencia));
+        $moverArchivo = $archivo->move(public_path('files/donaciones'), $doneGuardar);
+        if (!$moverArchivo) {
+            DonacionesEvidencias::where('doen_codigo', $doneGuardar)->delete();
+            return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
+        }
+
+        $actiActualizar = DonacionesEvidencias::where('doen_codigo', $doneGuardar)->update([
+            'doen_ruta' => 'files/donaciones/' . $doneGuardar,
+            'doen_mime' => $archivo->getClientMimeType(),
+            'doen_nombre_origen' => $archivo->getClientOriginalName(),
+            'doen_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'doen_rol_mod' => Session::get('admin')->rous_codigo,
+            'doen_rut_mod' => Session::get('admin')->usua_nickname
+        ]);
+        if (!$actiActualizar)
+            return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
+        return redirect()->route('admin.donaciones.evidencias.listar', $dona_codigo)->with('exitoEvidencia', 'La evidencia fue registrada correctamente.');
+    }
+
+    public function descargarEvidencia($doen_codigo)
+    {
+        try {
+            $evidencia = DonacionesEvidencias::where('doen_codigo', $doen_codigo)->first();
+            if (!$evidencia)
+                return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
+
+            $archivo = public_path($evidencia->doen_ruta);
+            $cabeceras = array(
+                'Content-Type: ' . $evidencia->doen_mime,
+                'Cache-Control: no-cache, no-store, must-revalidate',
+                'Pragma: no-cache'
+            );
+            return Response::download($archivo, $evidencia->doen_nombre_origen, $cabeceras);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('errorEvidencia', 'Ocurrió un problema al descargar la evidencia, intente más tarde.');
+        }
+    }
+
+    public function eliminarEvidencia($doen_codigo)
+    {
+        try {
+            $evidencia = DonacionesEvidencias::where('doen_codigo', $doen_codigo)->first();
+            if (!$evidencia)
+                return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
+
+            if (File::exists(public_path($evidencia->doen_ruta)))
+                File::delete(public_path($evidencia->doen_ruta));
+            $actiEliminar = DonacionesEvidencias::where('doen_codigo', $doen_codigo)->delete();
+            if (!$actiEliminar)
+                return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al eliminar la evidencia, intente más tarde.');
+            return redirect()->route('admin.actividades.evidencias.listar', $evidencia->dona_codigo)->with('exitoEvidencia', 'La evidencia fue eliminada correctamente.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('errorEvidencia', 'Ocurrió un problema al eliminar la evidencia, intente más tarde.');
+        }
+    }
+
     public function TraerDirigentes(Request $request)
     {
         if (isset($request->organizacion)) {
@@ -285,6 +408,7 @@ class DonacionesController extends Controller
 
     public function EliminarDonaciones($dona_codigo)
     {
+        DonacionesEvidencias::where(['dona_codigo' => $dona_codigo])->delete();
         Donaciones::where(['dona_codigo' => $dona_codigo])->delete();
         return redirect()->route('admin.donaciones.listar')->with('exitoDonacion', 'La donación se eliminó correctamente.');
     }

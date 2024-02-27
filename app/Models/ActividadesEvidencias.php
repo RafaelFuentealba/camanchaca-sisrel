@@ -15,7 +15,7 @@ class ActividadesEvidencias extends Model
 
     protected $fillable = [
         'acti_codigo', #clave foranea
-        'acti_codigo',
+        'acen_codigo',
         'acen_nombre',
         'acen_descripcion',
         'acen_ruta',

@@ -17,6 +17,15 @@
                                     </div>
                                 </div>
                             @endif
+
+                            @if (Session::has('errorDonacion'))
+                                <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
+                                    <div class="alert-body">
+                                        <strong>{{ Session::get('errorDonacion') }}</strong>
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                         <div class="col-3"></div>
                     </div>
@@ -127,6 +136,10 @@
                                                         class="btn btn-icon btn-primary" data-toggle="tooltip"
                                                         data-placement="top" title="Ver detalles"><i
                                                             class="fas fa-eye"></i></a>
+                                                    <a href="{{ route('admin.donaciones.evidencias.listar', $donacion->dona_codigo) }}"
+                                                        class="btn btn-icon btn-warning" data-toggle="tooltip"
+                                                        data-placement="top" title="Adjuntar evidencia"><i
+                                                            class="fas fa-paperclip"></i></a>
                                                     <a href="{{ route('admin.donaciones.editar', $donacion->dona_codigo) }}"
                                                         class="btn btn-icon btn-warning" data-toggle="tooltip"
                                                         data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
