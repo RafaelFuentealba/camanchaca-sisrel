@@ -24,11 +24,11 @@ class DonacionesController extends Controller
     {
         //TODO: Filtro de comunas en donaciones
         $comunas = Comunas::select('comu_codigo', 'comu_nombre')->get();
-        $organizaciones = Organizaciones::select('orga_codigo','orga_nombre')->get();
+        $organizaciones = Organizaciones::select('orga_codigo', 'orga_nombre')->get();
 
         $donaciones = Donaciones::where('dona_vigente', 'S')
-            ->join('comunas','comunas.comu_codigo','donaciones.comu_codigo')
-            ->join('organizaciones','organizaciones.comu_codigo','comunas.comu_codigo');
+            ->join('organizaciones', 'organizaciones.orga_codigo','donaciones.orga_codigo')
+            ->join('comunas','comunas.comu_codigo','donaciones.comu_codigo');
 
         if ($request->orga_codigo != null) {
 
@@ -38,6 +38,8 @@ class DonacionesController extends Controller
         if ($request->comu_codigo != null) {
 
             $donaciones->where('comunas.comu_codigo', $request->comu_codigo);
+            // ->join('comunas', 'comunas.comu_codigo', 'donaciones.comu_codigo')
+
         }
         if ($request->fecha_inicio != null && $request->fecha_termino) {
 
@@ -45,6 +47,7 @@ class DonacionesController extends Controller
         }
 
         $donaciones = $donaciones->get();
+        // return $donaciones;
         return view('admin.donaciones.listar', ['donaciones' => $donaciones, 'organizaciones' => $organizaciones, 'comunas' => $comunas]);
     }
 

@@ -105,7 +105,7 @@
                                 <table class="table table-striped table-md" id="tableExport" style="width:100%;">
                                     <thead>
                                         <tr>
-                                            <!-- <th>ID</th> -->
+                                            <th>ID</th>
                                             <th>Organización</th>
                                             <th>Motivo de donación</th>
                                             <th>Solicitante</th>
@@ -119,7 +119,7 @@
                                         @if ($donaciones != null)
                                             @foreach ($donaciones as $donacion)
                                                 <tr>
-                                                    <!-- <td>{{ $donacion->dona_codigo }}</td> -->
+                                                    <td>{{ $donacion->dona_codigo }}</td>
                                                     <td>{{ $donacion->orga_nombre }}</td>
                                                     <td>{{ $donacion->dona_motivo }}</td>
                                                     <td>{{ $donacion->dona_nombre_solicitante }}</td>
