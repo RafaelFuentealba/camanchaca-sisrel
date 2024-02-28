@@ -23,61 +23,28 @@ class DonacionesController extends Controller
     public function ListarDonaciones(Request $request)
     {
         //TODO: Filtro de comunas en donaciones
-        $donaciones = null;
-        $comunas = Comunas::select('comu_codigo','comu_nombre')->get();
-        ;
-        $organizaciones = DB::table('donaciones')
-            ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-            ->select('organizaciones.orga_nombre', 'organizaciones.orga_codigo')
-            ->distinct()
-            ->get();
-        if (count($request->all()) > 0) {
-            if ($request->comu_codigo != '' && $request->orga_codigo != "" && $request->fecha_inicio != "" && $request->fecha_termino != "") {
-                $donaciones = DB::table('donaciones')
-                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
-                    ->where(['donaciones.orga_codigo' => $request->orga_codigo, 'comunas.comu_codigo' => $request->comu_codigo])
-                    ->whereBetween('donaciones.dona_fecha_entrega', [$request->fecha_inicio, $request->fecha_termino])
-                    ->get();
+        $comunas = Comunas::select('comu_codigo', 'comu_nombre')->get();
+        $organizaciones = Organizaciones::select('orga_codigo','orga_nombre')->get();
 
-            } elseif ($request->comu_codigo != '' && $request->orga_codigo == "" && $request->fecha_inicio != "" && $request->fecha_termino != "") {
-                $donaciones = DB::table('donaciones')
-                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
-                    ->where('comunas.comu_codigo', $request->comu_codigo)
-                    ->whereBetween('donaciones.dona_fecha_entrega', [$request->fecha_inicio, $request->fecha_termino])
-                    ->get();
+        $donaciones = Donaciones::where('dona_vigente', 'S')
+            ->join('comunas','comunas.comu_codigo','donaciones.comu_codigo')
+            ->join('organizaciones','organizaciones.comu_codigo','comunas.comu_codigo');
 
-            } elseif ($request->comu_codigo != '' && $request->orga_codigo == "" && $request->fecha_inicio == "" && $request->fecha_termino == "") {
-                $donaciones = DB::table('donaciones')
-                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
-                    ->where('comunas.comu_codigo', $request->comu_codigo)
-                    ->get();
-            } elseif ($request->comu_codigo != '' && $request->orga_codigo != "" && $request->fecha_inicio == "" && $request->fecha_termino == "") {
-                $donaciones = DB::table('donaciones')
-                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
-                    ->where(['donaciones.orga_codigo' => $request->orga_codigo, 'comunas.comu_codigo' => $request->comu_codigo])
-                    ->get();
-            } elseif ($request->comu_codigo == '' && $request->orga_codigo != "" && $request->fecha_inicio == "" && $request->fecha_termino == "") {
-                $donaciones = DB::table('donaciones')
-                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-                    ->where('organizaciones.orga_codigo', $request->orga_codigo)
-                    ->get();
-            } elseif ($request->comu_codigo == '' && $request->orga_codigo != "" && $request->fecha_inicio != "" && $request->fecha_termino != "") {
-                $donaciones = DB::table('donaciones')
-                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-                    ->where('organizaciones.orga_codigo', $request->orga_codigo)
-                    ->whereBetween('donaciones.dona_fecha_entrega', [$request->fecha_inicio, $request->fecha_termino])
-                    ->get();
-            }
-        } else {
-            $donaciones = DB::table('donaciones')
-                ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-                ->select('donaciones.*', 'organizaciones.orga_nombre')
-                ->get();
+        if ($request->orga_codigo != null) {
+
+            $donaciones->where('organizaciones.orga_codigo', $request->orga_codigo);
         }
+
+        if ($request->comu_codigo != null) {
+
+            $donaciones->where('comunas.comu_codigo', $request->comu_codigo);
+        }
+        if ($request->fecha_inicio != null && $request->fecha_termino) {
+
+            $donaciones->whereBetween('donaciones.dona_fecha_entrega', [$request->fecha_inicio, $request->fecha_termino]);
+        }
+
+        $donaciones = $donaciones->get();
         return view('admin.donaciones.listar', ['donaciones' => $donaciones, 'organizaciones' => $organizaciones, 'comunas' => $comunas]);
     }
 
@@ -86,8 +53,8 @@ class DonacionesController extends Controller
         $donacion = DB::table('donaciones')
             ->join('pilares', 'pilares.pila_codigo', '=', 'donaciones.pila_codigo')
             ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-            ->join('comunas','comunas.comu_codigo','donaciones.comu_codigo')
-            ->select('pilares.*', 'organizaciones.*', 'donaciones.*','comunas.comu_nombre')
+            ->join('comunas', 'comunas.comu_codigo', 'donaciones.comu_codigo')
+            ->select('pilares.*', 'organizaciones.*', 'donaciones.*', 'comunas.comu_nombre')
             ->where('donaciones.dona_codigo', '=', $dona_codigo)
             ->first();
 

@@ -91,7 +91,7 @@
                                                 name="fecha_termino">
                                         </div>
                                     </div>
-                                    <div class="col-xl-12 col-md-12 col-lg-12 text-reight mb-12">
+                                    <div class="col-xl-12 col-md-12 col-lg-12 text-right mb-12">
                                         <button type="submit" class="btn btn-primary mr-1 waves-effect"><i
                                                 class="fas fa-search"></i> Filtrar</button>
                                         <a href="{{ route('admin.donaciones.listar') }}" type="button"
