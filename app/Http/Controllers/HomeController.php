@@ -255,6 +255,8 @@ class HomeController extends Controller
         $division = $request->input('divi_codigo');
         $fechaInicio = $request->input('fecha_inicio');
         $fechaFinal = $request->input('fecha_final');
+        $fecha_final_add = Carbon::parse($request->input('fecha_final'));
+        $fecha_final_add = $fecha_final_add->copy()->addDay();
 
         $cantidadIniciativas = Iniciativas::where('inic_vigente', 'S')
             ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
@@ -262,29 +264,29 @@ class HomeController extends Controller
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
             ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
-            ->whereBetween('iniciativas.inic_creado', [$fechaInicio, $fechaFinal]);
+            ->whereBetween('iniciativas.inic_creado', [$fechaInicio, $fecha_final_add]);
 
 
         $cantidadOrganizaciones = Organizaciones::where('orga_vigente', 'S')->leftjoin('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
             ->leftjoin('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
             ->leftjoin('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
-            ->whereBetween('organizaciones.orga_creado', [$fechaInicio, $fechaFinal]);
-        // ->whereBetween('organizaciones.orga_fecha_vinculo', [$fechaInicio, $fechaFinal]);
+            ->whereBetween('organizaciones.orga_creado', [$fechaInicio, $fecha_final_add]);
+        // ->whereBetween('organizaciones.orga_fecha_vinculo', [$fechaInicio, $fecha_final_add]);
 
         $cantidadActividades = Actividades::where('acti_vigente', 'S')->join('unidades', 'unidades.unid_codigo', 'actividades.unid_codigo')
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
             ->join('comunas', 'comunas.comu_codigo', 'actividades.comu_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
-            ->whereBetween('actividades.acti_creado', [$fechaInicio, $fechaFinal]);
-        // ->whereBetween('actividades.acti_fecha', [$fechaInicio, $fechaFinal]);
+            ->whereBetween('actividades.acti_creado', [$fechaInicio, $fecha_final_add]);
+        // ->whereBetween('actividades.acti_fecha', [$fechaInicio, $fecha_final_add]);
 
         $cantidadDonaciones = Donaciones::where('dona_vigente', 'S')
             ->join('comunas', 'comunas.comu_codigo', 'donaciones.comu_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
             ->leftjoin('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
             ->leftjoin('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
-            ->whereBetween('donaciones.dona_fecha_entrega', [$fechaInicio, $fechaFinal]);
+            ->whereBetween('donaciones.dona_fecha_entrega', [$fechaInicio, $fecha_final_add]);
 
         $actividadesOrganizaciones = Actividades::where('acti_vigente', 'S')
             ->join('organizaciones', 'organizaciones.orga_codigo', 'actividades.orga_codigo')
@@ -292,7 +294,7 @@ class HomeController extends Controller
             ->leftjoin('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
             ->join('comunas', 'comunas.comu_codigo', 'actividades.comu_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
-            ->whereBetween('actividades.acti_fecha', [$fechaInicio, $fechaFinal]);
+            ->whereBetween('actividades.acti_fecha', [$fechaInicio, $fecha_final_add]);
 
         $iniciativasOrganizaciones = Iniciativas::where('inic_vigente', 'S')
             ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
@@ -302,7 +304,7 @@ class HomeController extends Controller
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
             ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
             ->select('organizaciones.orga_codigo')
-            ->whereBetween('iniciativas.inic_creado', [$fechaInicio, $fechaFinal]);
+            ->whereBetween('iniciativas.inic_creado', [$fechaInicio, $fecha_final_add]);
 
         $iniciativasUnidades = Iniciativas::join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', 'iniciativas.inic_codigo')
             ->join('unidades', 'unidades.unid_codigo', 'iniciativas_unidades.unid_codigo')
@@ -311,8 +313,8 @@ class HomeController extends Controller
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
             ->select(DB::raw('GROUP_CONCAT(unidades.unid_nombre SEPARATOR ", ") AS unidades_nombre'), 'iniciativas.inic_codigo')
             ->groupBy('iniciativas.inic_codigo')
-            ->whereBetween('iniciativas.inic_creado', [$fechaInicio, $fechaFinal]);
-        // ->whereBetween('iniciativas.inic_creado', [$fechaInicio, $fechaFinal])
+            ->whereBetween('iniciativas.inic_creado', [$fechaInicio, $fecha_final_add]);
+        // ->whereBetween('iniciativas.inic_creado', [$fechaInicio, $fecha_final_add])
         // ->get();
         // return $iniciativasUnidades;
 
@@ -323,7 +325,7 @@ class HomeController extends Controller
             ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
-            ->whereBetween('costos_dinero.codi_creado', [$fechaInicio, $fechaFinal]);
+            ->whereBetween('costos_dinero.codi_creado', [$fechaInicio, $fecha_final_add]);
 
         $costosEspecies = CostosEspecies::select(DB::raw('IFNULL(sum(coes_valorizacion), 0) as total'))->where('coes_vigente', 'S')
             ->join('iniciativas', 'iniciativas.inic_codigo', 'costos_especies.inic_codigo')
@@ -332,7 +334,7 @@ class HomeController extends Controller
             ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
-            ->whereBetween('costos_especies.coes_creado', [$fechaInicio, $fechaFinal]);
+            ->whereBetween('costos_especies.coes_creado', [$fechaInicio, $fecha_final_add]);
 
         $costosInfra = CostosInfraestructura::select(DB::raw('IFNULL(sum(coin_valorizacion), 0) as total'))->where('coin_vigente', 'S')
             ->join('iniciativas', 'iniciativas.inic_codigo', 'costos_infraestructura.inic_codigo')
@@ -341,7 +343,7 @@ class HomeController extends Controller
             ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
-            ->whereBetween('costos_infraestructura.coin_creado', [$fechaInicio, $fechaFinal]);
+            ->whereBetween('costos_infraestructura.coin_creado', [$fechaInicio, $fecha_final_add]);
 
         $costosRrhh = CostosRrhh::select(DB::raw('IFNULL(sum(corh_valorizacion), 0) as total'))->where('corh_vigente', 'S')
             ->join('iniciativas', 'iniciativas.inic_codigo', 'costos_rrhh.inic_codigo')
@@ -350,12 +352,12 @@ class HomeController extends Controller
             ->join('comunas', 'comunas.comu_codigo', 'unidades.comu_codigo')
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
-            ->whereBetween('costos_rrhh.corh_creado', [$fechaInicio, $fechaFinal]);
+            ->whereBetween('costos_rrhh.corh_creado', [$fechaInicio, $fecha_final_add]);
 
         $costosDonaciones = Donaciones::select(DB::raw('IFNULL(sum(dona_monto), 0) as total'))->where('dona_vigente', 'S')
             ->join('comunas', 'comunas.comu_codigo', 'donaciones.comu_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
-            ->whereBetween('donaciones.dona_fecha_entrega', [$fechaInicio, $fechaFinal]);
+            ->whereBetween('donaciones.dona_fecha_entrega', [$fechaInicio, $fecha_final_add]);
         //Agregar cuando se aplique filtro por donaciones
         // ->leftjoin('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
         //     ->leftjoin('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')

@@ -88,6 +88,8 @@ class IniciativasController extends Controller
                     ->distinct()
                     ->get();
             } elseif ($request->region != '' && $request->comuna != '' && $request->unidad != '' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+                $fecha_final_add = Carbon::parse($request->input('fecha_termino'));
+                $fecha_final_add = $fecha_final_add->copy()->addDay();
                 $inicListar = DB::table('iniciativas')
                     ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
                     ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
@@ -98,7 +100,7 @@ class IniciativasController extends Controller
                     ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', '=', 'iniciativas.inic_codigo')
                     ->join('unidades', 'unidades.unid_codigo', '=', 'iniciativas_unidades.unid_codigo')
                     ->where(['inic_vigente' => 'S', 'comunas.regi_codigo' => $request->region, 'comunas.comu_codigo' => $request->comuna, 'unidades.unid_codigo' => $request->unidad])
-                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
+                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $fecha_final_add])
                     ->distinct()
                     ->orderBy('iniciativas.inic_creado', 'desc')
                     ->get();
@@ -115,6 +117,8 @@ class IniciativasController extends Controller
                     ->distinct()
                     ->get();
             } elseif ($request->region == '' && $request->comuna != '' && $request->unidad != '' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+                $fecha_final_add = Carbon::parse($request->input('fecha_termino'));
+                $fecha_final_add = $fecha_final_add->copy()->addDay();
                 $inicListar = DB::table('iniciativas')
                     ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
                     ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
@@ -124,11 +128,13 @@ class IniciativasController extends Controller
                     ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', '=', 'iniciativas.inic_codigo')
                     ->join('unidades', 'unidades.unid_codigo', '=', 'iniciativas_unidades.unid_codigo')
                     ->where(['inic_vigente' => 'S', 'comunas.comu_codigo' => $request->comuna, 'unidades.unid_codigo' => $request->unidad])
-                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
+                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $fecha_final_add])
                     ->distinct()
                     ->orderBy('iniciativas.inic_creado', 'desc')
                     ->get();
             } elseif ($request->region == '' && $request->comuna == '' && $request->unidad == '' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+                $fecha_final_add = Carbon::parse($request->input('fecha_termino'));
+                $fecha_final_add = $fecha_final_add->copy()->addDay();
                 $inicListar = DB::table('iniciativas')
                     ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
                     ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
@@ -138,7 +144,7 @@ class IniciativasController extends Controller
                     ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', '=', 'iniciativas.inic_codigo')
                     ->join('unidades', 'unidades.unid_codigo', '=', 'iniciativas_unidades.unid_codigo')
                     ->where(['inic_vigente' => 'S'])
-                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
+                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $fecha_final_add])
                     ->distinct()
                     ->orderBy('iniciativas.inic_creado', 'desc')
                     ->get();
@@ -839,12 +845,12 @@ class IniciativasController extends Controller
         return json_encode([
             'estado' => true,
             'resultado' => [
-                    'mecanismo' => $mecaDatos,
-                    'frecuencia' => $frecDatos,
-                    'cobertura' => $partDatos,
-                    'resultados' => $resuDatos,
-                    'evaluacion' => $evalDatos
-                ]
+                'mecanismo' => $mecaDatos,
+                'frecuencia' => $frecDatos,
+                'cobertura' => $partDatos,
+                'resultados' => $resuDatos,
+                'evaluacion' => $evalDatos
+            ]
         ]);
     }
 

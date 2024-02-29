@@ -30,6 +30,10 @@ class DonacionesController extends Controller
             ->join('organizaciones', 'organizaciones.orga_codigo','donaciones.orga_codigo')
             ->join('comunas','comunas.comu_codigo','donaciones.comu_codigo');
 
+        $fecha_final_add = Carbon::parse($request->input('fecha_termino'));
+        $fecha_final_add = $fecha_final_add->copy()->addDay();
+
+
         if ($request->orga_codigo != null) {
 
             $donaciones->where('organizaciones.orga_codigo', $request->orga_codigo);
@@ -43,7 +47,7 @@ class DonacionesController extends Controller
         }
         if ($request->fecha_inicio != null && $request->fecha_termino) {
 
-            $donaciones->whereBetween('donaciones.dona_fecha_entrega', [$request->fecha_inicio, $request->fecha_termino]);
+            $donaciones->whereBetween('donaciones.dona_fecha_entrega', [$request->fecha_inicio, $fecha_final_add]);
         }
 
         $donaciones = $donaciones->get();
