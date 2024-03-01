@@ -103,7 +103,7 @@
                                                 {{-- @if ($inversion > 1000000)
                                                     {{ number_format($inversion / 1000000, 1) . ' M' }}
                                                 @else --}}
-                                                    {{ '$' . number_format($inversion, 0, ',', '.') }}
+                                                {{ '$' . number_format($inversion, 0, ',', '.') }}
                                                 {{-- @endif --}}
                                             </h3>
                                             <h6 class="text-muted">Inversión</h6>
@@ -256,8 +256,10 @@
                                                     <select name="anho" id="anho" class="form-control select2"
                                                         style="width: 100%">
                                                         <option value="">Seleccione...</option>
-                                                        @forelse ($anhos as $anho )
-                                                            <option value="{{$anho}}" {{Request::get('anho') == $anho ? 'selected' : ''}}>{{$anho}}</option>
+                                                        @forelse ($anhos as $anho)
+                                                            <option value="{{ $anho }}"
+                                                                {{ Request::get('anho') == $anho ? 'selected' : '' }}>
+                                                                {{ $anho }}</option>
                                                         @empty
                                                             <option value="" disabled>No hay registros</option>
                                                         @endforelse
@@ -338,48 +340,53 @@
                                     <h4>Indicar dato para reporte</h4>
                                 </div>
                                 <div class="card-body">
-                                    <form action="{{ route('admin.index.reporte') }}" target="_blank"
-                                        method="GET">
+                                    <form action="{{ route('admin.index.reporte') }}" target="_blank" method="GET">
                                         {{-- @csrf --}}
                                         <div class="row">
 
                                             <div class="col-xl-3 col-md-3 col-lg-6">
                                                 <div class="form-group"><label for="regi_codigo">Región</label>
-                                                    <select name="regi_codigo" id="regi_codigo" class="select2 form-control" style="width: 100%">
+                                                    <select name="regi_codigo" id="regi_codigo"
+                                                        class="select2 form-control" style="width: 100%">
                                                         <option value="">Seleccione...</option>
                                                         @forelse ($regiones as $region)
-                                                            <option value="{{$region->regi_nombre}}">{{$region->regi_nombre}}</option>
+                                                            <option value="{{ $region->regi_nombre }}">
+                                                                {{ $region->regi_nombre }}</option>
                                                         @empty
                                                             <option value="">Sin registros disponibles</option>
                                                         @endforelse
                                                     </select>
-                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="col-xl-3 col-md-3 col-lg-6">
                                                 <div class="form-group"><label for="comu_codigo">Comuna</label>
-                                                    <select name="comu_codigo" id="comu_codigo" class="select2 form-control" style="width: 100%">
+                                                    <select name="comu_codigo" id="comu_codigo"
+                                                        class="select2 form-control" style="width: 100%">
                                                         <option value="">Seleccione...</option>
                                                         @forelse ($comunas as $comuna)
-                                                            <option value="{{$comuna->comu_nombre}}">{{$comuna->comu_nombre}}</option>
+                                                            <option value="{{ $comuna->comu_nombre }}">
+                                                                {{ $comuna->comu_nombre }}</option>
                                                         @empty
                                                             <option value="">Sin registros disponibles</option>
                                                         @endforelse
                                                     </select>
-                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="col-xl-2 col-md-2 col-lg-6">
                                                 <div class="form-group"><label for="divi_codigo">División</label>
-                                                    <select name="divi_codigo" id="divi_codigo" class="select2 form-control" style="width: 100%">
+                                                    <select name="divi_codigo" id="divi_codigo"
+                                                        class="select2 form-control" style="width: 100%">
                                                         <option value="">Seleccione...</option>
                                                         @forelse ($divisiones as $division)
-                                                            <option value="{{$division->divi_nombre}}">{{$division->divi_nombre}}</option>
+                                                            <option value="{{ $division->divi_nombre }}">
+                                                                {{ $division->divi_nombre }}</option>
                                                         @empty
                                                             <option value="">Sin registros disponibles</option>
                                                         @endforelse
                                                     </select>
-                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="col-xl-2 col-md-2 col-lg-2">
@@ -474,7 +481,8 @@
                 url: window.location.origin + '/admin/dashboard/general/iniciativas',
                 data: {
                     region: $('#region').val(),
-                    division: $('#division').val()
+                    division: $('#division').val(),
+                    anho: $('#anho').val()
                 },
                 success: function(resConsultar) {
                     respuesta = JSON.parse(resConsultar);
@@ -514,7 +522,8 @@
                 url: window.location.origin + '/admin/dashboard/general/organizaciones',
                 data: {
                     region: $('#region').val(),
-                    division: $('#division').val()
+                    division: $('#division').val(),
+                    anho: $('#anho').val()
                 },
                 success: function(resConsultar) {
                     respuesta = JSON.parse(resConsultar);
