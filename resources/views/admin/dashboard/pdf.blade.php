@@ -15,190 +15,29 @@
         <title>Reporte camanchaca</title>
 
         <style>
-            body {
-                font-family: Arial, Helvetica, sans-serif;
-                font-size: 12px;
-                margin: 0;
-                padding: 0;
+            #table {
+              font-family: Arial, Helvetica, sans-serif;
+              border-collapse: collapse;
+              width: 100%;
             }
 
-            .content {
-                text-align: center;
-                padding: 20px;
-                padding-bottom: 10%;
+            #table td, #table th {
+              border: 1px solid #ddd;
+              padding: 8px;
             }
 
-            img {
-                width: 293px;
-                height: 81px;
-            }
+            #table tr:nth-child(even){background-color: #f2f2f2;}
 
-            //TODO:TABLA DE COSTOS
-            table.greenTable {
-                font-family: "Courier New", Courier, monospace;
-                border: 6px solid #24943A;
-                background-color: #D4EED1;
-                width: 100%;
-                text-align: right;
-            }
+            #table tr:hover {background-color: #ddd;}
 
-            table.greenTable td,
-            table.greenTable th {
-                border: 1px solid #24943A;
-                padding: 3px 2px;
+            #table th {
+              padding-top: 8px;
+              padding-bottom: 8px;
+              text-align: left;
+              background-color: #0070BA;
+              color: white;
             }
-
-            table.greenTable tbody td {
-                font-size: 13px;
-            }
-
-            table.greenTable td:nth-child(even) {
-                background: #B7D9F5;
-            }
-
-            table.greenTable thead {
-                background: #24943A;
-                border-bottom: 0px solid #444444;
-            }
-
-            table.greenTable thead th {
-                font-size: 19px;
-                font-weight: bold;
-                color: #F0F0F0;
-                text-align: center;
-                border-left: 2px solid #24943A;
-            }
-
-            table.greenTable thead th:first-child {
-                border-left: none;
-            }
-
-            table.greenTable tfoot td {
-                font-size: 13px;
-            }
-
-            table.greenTable tfoot .links {
-                text-align: right;
-            }
-
-            table.greenTable tfoot .links a {
-                display: inline-block;
-                background: #FFFFFF;
-                color: #24943A;
-                padding: 2px 8px;
-                border-radius: 5px;
-            }
-
-            //TODO: TABLA DE INICIATIVAS
-            table.blueTable {
-                border: 1px solid #1C6EA4;
-                background-color: #EEEEEE;
-                width: 100%;
-                text-align: left;
-                border-collapse: collapse;
-            }
-
-            table.blueTable td,
-            table.blueTable th {
-                border: 3px solid #AAAAAA;
-                padding: 3px 2px;
-            }
-
-            table.blueTable tbody td {
-                font-size: 13px;
-            }
-
-            table.blueTable tr:nth-child(even) {
-                background: #D0E4F5;
-            }
-
-            table.blueTable thead {
-                background: #1C6EA4;
-                border-bottom: 2px solid #444444;
-            }
-
-            table.blueTable thead th {
-                font-size: 15px;
-                font-weight: bold;
-                color: #FFFFFF;
-                border-left: 2px solid #D0E4F5;
-            }
-
-            table.blueTable thead th:first-child {
-                border-left: none;
-            }
-
-            table.blueTable tfoot td {
-                font-size: 14px;
-            }
-
-            table.blueTable tfoot .links {
-                text-align: right;
-            }
-
-            table.blueTable tfoot .links a {
-                display: inline-block;
-                background: #1C6EA4;
-                color: #FFFFFF;
-                padding: 2px 8px;
-                border-radius: 5px;
-            }
-
-            //TODO:tabla unidades
-            table.redTable {
-                border: 2px solid #A40808;
-                background-color: #EEE7DB;
-                width: 100%;
-                text-align: left;
-                border-collapse: collapse;
-            }
-
-            table.redTable td,
-            table.redTable th {
-                border: 1px solid #AAAAAA;
-                padding: 3px 2px;
-            }
-
-            table.redTable tbody td {
-                font-size: 13px;
-            }
-
-            table.redTable tr:nth-child(even) {
-                background: #F5C8BF;
-            }
-
-            table.redTable thead {
-                background: #A40808;
-            }
-
-            table.redTable thead th {
-                font-size: 17px;
-                font-weight: bold;
-                color: #FFFFFF;
-                text-align: center;
-                border-left: 2px solid #A40808;
-            }
-
-            table.redTable thead th:first-child {
-                border-left: none;
-            }
-
-            table.redTable tfoot td {
-                font-size: 13px;
-            }
-
-            table.redTable tfoot .links {
-                text-align: right;
-            }
-
-            table.redTable tfoot .links a {
-                display: inline-block;
-                background: #FFFFFF;
-                color: #A40808;
-                padding: 2px 8px;
-                border-radius: 5px;
-            }
-        </style>
+            </style>
     </head>
 
     <body>
@@ -208,43 +47,80 @@
                 alt="logo camanchaca">
         </div>
 
-        <div class="contenedor">
-            <div class="valor">
-                @if (Request::get('regi_codigo') != null)
-                    <p style="font-size: 10"><strong>Región: </strong><span>{{ Request::get('regi_codigo') }}</span></p>
-                @else
-                    <p style="font-size: 10"><strong>Región: </strong><span>No especificada</span></p>
-                @endif
 
-                @if (Request::get('comu_codigo') != null)
-                    <p style="font-size: 10"><strong>Comuna: </strong><span>{{ Request::get('comu_codigo') }}</span></p>
+        <h1 style="color: #0070BA; text-align:center;">Reporte</h1>
+        <div class="contenedor">
+            <table id="table">
+                @if (Request::get('regi_codigo') != null)
+                    <tr>
+                        <th>Región</th>
+                        <td><span>{{ Request::get('regi_codigo') }}</span></td>
+                    </tr>
                 @else
-                    <p style="font-size: 10"><strong>Comuna: </strong><span>No especificada</span></p>
+                <tr>
+                    <th>Región</th>
+                    <td><span>No especificada</span></td>
+                </tr>
+                @endif
+                @if (Request::get('comu_codigo') != null)
+                <tr>
+                    <th>Comuna</th>
+                    <td><span>{{ Request::get('comu_codigo') }}</span></td>
+                </tr>
+                @else
+                <tr>
+                    <th>Comuna</th>
+                    <td><span>No especificada</span></td>
+                </tr>
                 @endif
 
                 @if (Request::get('divi_codigo') != null)
-                    <p style="font-size: 10"><strong>División </strong><span>{{ Request::get('divi_codigo') }}</span>
-                    </p>
+                <tr>
+                    <th>División</th>
+                    <td><span>{{ Request::get('divi_codigo') }}</span></td>
+                </tr>
                 @else
-                    <p style="font-size: 10"><strong>División </strong><span>No especificada</span></p>
+                <tr>
+                    <th>División</th>
+                    <td><span>No especificada</span></td>
+                </tr>
                 @endif
 
-                <p style="font-size: 10"><strong>Datos obtenidos: </strong><span> desde {{ $fechaInicio }} hasta
-                        {{ $fechaFinal }}</span></p>
-                <p style="font-size: 10"><strong>Iniciativas: </strong><span>{{ $cantidadIniciativas }}</span></p>
-                <p style="font-size: 10"><strong>Organizaciones: </strong><span>{{ $cantidadOrganizaciones }}</span></p>
-                <p style="font-size: 10"><strong>Actividades: </strong><span>{{ $cantidadActividades }}</span></p>
-                <p style="font-size: 10"><strong>Donaciones: </strong><span>{{ $cantidadDonaciones }}</span></p>
-                <p style="font-size: 10"><strong>Organizaciones en actividades:
-                    </strong><span>{{ $actividadesOrganizaciones }}</span></p>
-                <p style="font-size: 10"><strong>Organizaciones en iniciativas:
-                    </strong><span>{{ $iniciativasOrganizaciones }}</span></p>
-            </div>
+                <tr>
+                    <th>Iniciativas:</th>
+                    <td><span>{{ $cantidadIniciativas }}</span></td>
+                </tr>
+                <tr>
+                    <th>Organizaciones:</th>
+                    <td><span>{{ $cantidadOrganizaciones }}</span></td>
+                </tr>
+                <tr>
+                    <th>Actividades:</th>
+                    <td><span>{{ $cantidadActividades }}</span></td>
+                </tr>
+                <tr>
+                    <th>Donaciones:</th>
+                    <td><span>{{ $cantidadDonaciones }}</span></td>
+                </tr>
+                <tr>
+                    <th>Organizaciones en actividades:</th>
+                    <td><span>{{ $actividadesOrganizaciones }}</span></td>
+                </tr>
+                <tr>
+                    <th>Organizaciones en iniciativas:</th>
+                    <td><span>{{ $iniciativasOrganizaciones }}</span></td>
+                </tr>
+
+
+            </table>
 
         </div>
 
         <div style="padding-top: 10%">
-            <table class="blueTable">
+            @if (count($iniciativasDatos) == 0)
+                <h2 style="color: #0070BA; text-align:center">No hay iniciativas para los datos seleccionados</h2>
+            @else
+            <table id="table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -266,32 +142,41 @@
                     @endforeach
                 </tbody>
             </table>
+
+            @endif
+
         </div>
 
-        <div style="padding-top: 10%;padding-left: 30%">
-            <table class="redTable">
-                <thead>
-                    <tr>
-                        <th>ID Iniciativa</th>
-                        <th>Unidades</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($iniciativasUnidades as $iniciativas )
-                    <tr>
-                        <td>{{$iniciativas->inic_codigo}}</td>
-                        <td>{{$iniciativas->unidades_nombre}}</td>
-                    </tr>
-                    @endforeach
+        <div>
+            @if (count($iniciativasUnidades) == 0)
+                <h2 style="color: #0070BA; text-align:center">No hay unidades para los datos seleccionados</h2>
+            @else
+                <table id="table">
+                    <thead>
+                        <tr>
+                            <th>ID Iniciativa</th>
+                            <th>Unidades</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($iniciativasUnidades as $iniciativas )
+                        <tr>
+                            <td>{{$iniciativas->inic_codigo}}</td>
+                            <td>{{$iniciativas->unidades_nombre}}</td>
+                        </tr>
+                        @endforeach
 
 
-                </tbody>
-                </tr>
-            </table>
+                    </tbody>
+                    </tr>
+                </table>
+
+            @endif
+
         </div>
 
-        <div style="padding-top: 10%">
-            <table class="greenTable">
+        <div >
+            <table id="table">
                 <thead>
                     <tr>
                         <th>Aportes</th>
@@ -313,6 +198,9 @@
                 </tr>
             </table>
         </div>
+        <p style="font-size: 10; text-align:center;"><strong>Datos obtenidos </strong><span> desde {{ $fechaInicio }} hasta
+            {{ $fechaFinal }}</span></p>
+        <p style="text-align: center;">PDF generado en: <a href="camanchaca.vinculamos.org">camanchaca.vinculamos.org</a> | Compania Pesquera Camanchaca SA</p>
 
     </body>
 
