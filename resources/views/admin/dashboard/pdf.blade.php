@@ -15,6 +15,22 @@
         <title>Reporte camanchaca</title>
 
         <style>
+            html {
+            min-height: 100%;
+            position: relative;
+            }
+            body {
+            margin: 0;
+            margin-bottom: 40px;
+            }
+            footer {
+            background-color: #0070BA;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            color: white;
+            }
             #table {
               font-family: Arial, Helvetica, sans-serif;
               border-collapse: collapse;
@@ -23,7 +39,7 @@
 
             #table td, #table th {
               border: 1px solid #ddd;
-              padding: 8px;
+              padding: 1px;
             }
 
             #table tr:nth-child(even){background-color: #f2f2f2;}
@@ -37,89 +53,150 @@
               background-color: #0070BA;
               color: white;
             }
+
+            .container {
+            font-size: 0; /* Elimina el espacio entre los elementos en línea */
+            }
+
+            .div1, .div2 {
+            display: inline-block;
+            width: 50%;
+            vertical-align: top;
+            font-size: 16px; /* Restaura el tamaño de fuente a su valor normal */
+            }
+
+
+            .tableMod {
+            border-collapse: collapse;
+            text-align: left;
+            width: 100%;
+            }
+
+            .tdMod {
+            padding: 8px;
+            }
+
+            .tdMod:first-child {
+            text-align: left;
+            }
+
+            .tdMod:last-child {
+            text-align: left;
+            }
+
+            .titulo{
+                font-weight: bold;
+            }
+
+            .colorMod{
+                color: black;
+            }
             </style>
     </head>
 
     <body>
 
-        <div class="content">
-            <img src="https://www.camanchaca.cl/wp-content/themes/camanchaca/images/logo-cc-web-celeste.png"
+        <div class="content" style="text-align: center;">
+            <img width="200px" height="auto" style="display: block;margin-left:auto; margin-right:auto;" src="https://www.camanchaca.cl/wp-content/themes/camanchaca/images/logo-cc-web-celeste.png"
                 alt="logo camanchaca">
         </div>
 
 
-        <h1 style="color: #0070BA; text-align:center;">Reporte</h1>
-        <div class="contenedor">
-            <table id="table">
-                @if (Request::get('regi_codigo') != null)
-                    <tr>
-                        <th>Región</th>
-                        <td><span>{{ Request::get('regi_codigo') }}</span></td>
-                    </tr>
-                @else
-                <tr>
-                    <th>Región</th>
-                    <td><span>No especificada</span></td>
-                </tr>
-                @endif
-                @if (Request::get('comu_codigo') != null)
-                <tr>
-                    <th>Comuna</th>
-                    <td><span>{{ Request::get('comu_codigo') }}</span></td>
-                </tr>
-                @else
-                <tr>
-                    <th>Comuna</th>
-                    <td><span>No especificada</span></td>
-                </tr>
-                @endif
-
-                @if (Request::get('divi_codigo') != null)
-                <tr>
-                    <th>División</th>
-                    <td><span>{{ Request::get('divi_codigo') }}</span></td>
-                </tr>
-                @else
-                <tr>
-                    <th>División</th>
-                    <td><span>No especificada</span></td>
-                </tr>
-                @endif
-
-                <tr>
-                    <th>Iniciativas:</th>
-                    <td><span>{{ $cantidadIniciativas }}</span></td>
-                </tr>
-                <tr>
-                    <th>Organizaciones:</th>
-                    <td><span>{{ $cantidadOrganizaciones }}</span></td>
-                </tr>
-                <tr>
-                    <th>Actividades:</th>
-                    <td><span>{{ $cantidadActividades }}</span></td>
-                </tr>
-                <tr>
-                    <th>Donaciones:</th>
-                    <td><span>{{ $cantidadDonaciones }}</span></td>
-                </tr>
-                <tr>
-                    <th>Organizaciones en actividades:</th>
-                    <td><span>{{ $actividadesOrganizaciones }}</span></td>
-                </tr>
-                <tr>
-                    <th>Organizaciones en iniciativas:</th>
-                    <td><span>{{ $iniciativasOrganizaciones }}</span></td>
-                </tr>
-
-
-            </table>
-
+        <div style="display: flex; justify-content: space-between; padding-top: 5%; text-align:center;">
+            <div>
+                <h2 class="colorMod">Compañía Pesquera Camanchaca S.A</h2>
+                <h3 class="colorMod">Reporte de actividades</h3>
+            </div>
+            <div>
+                <h3 class="colorMod" style="margin-top:1px">Fecha de reporte: desde {{ $fechaInicio }} hasta
+                    {{ $fechaFinal }}</h3>
+            </div>
         </div>
 
-        <div style="padding-top: 10%">
+        <div class="container" style="margin-top:50px">
+            <div class="div1">
+                <table id="table">
+                    <tr>
+                        <th class="tdMod colorMod titulo">Región:</th>
+                        <td class="tdMod colorMod ">
+                            @if (Request::get('regi_codigo') != null)
+                                <span>{{ Request::get('regi_codigo') }}</span>
+                            @else
+                                <span>No especificada</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="tdMod colorMod titulo">División:</th>
+                        <td class="tdMod colorMod ">
+                            @if (Request::get('divi_codigo') != null)
+                                <span>{{ Request::get('divi_codigo') }}</span>
+                            @else
+                                <span>No especificada</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="tdMod colorMod titulo">Organizaciones:</th>
+                        <td class="tdMod colorMod ">
+                            <span>{{ $cantidadOrganizaciones }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="tdMod colorMod titulo">Donaciones:</th>
+                        <td class="tdMod colorMod ">
+                            <span>{{ $cantidadDonaciones }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="tdMod colorMod titulo">Organizaciones en iniciativas:</th>
+                        <td class="tdMod colorMod ">
+                            <span>{{ $iniciativasOrganizaciones }}</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="div2">
+                <table id="table">
+                    <tr>
+                        <th class="tdMod colorMod titulo">Comuna:</th>
+                        <td class="tdMod colorMod ">
+                            @if (Request::get('comu_codigo') != null)
+                                <span>{{ Request::get('comu_codigo') }}</span>
+                            @else
+                                <span>No especificada</span>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="tdMod colorMod titulo">Iniciativas:</th>
+                        <td class="tdMod colorMod ">
+                            <span>{{ $cantidadIniciativas }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="tdMod colorMod titulo">Actividades:</th>
+                        <td class="tdMod colorMod ">
+                            <span>{{ $cantidadActividades }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="tdMod colorMod titulo">Organizaciones en actividades:</th>
+                        <td class="tdMod colorMod ">
+                            <span>{{ $actividadesOrganizaciones }}</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+          </div>
+
+
+
+        <div style="padding-top: 5%">
             @if (count($iniciativasDatos) == 0)
-                <h2 style="color: #0070BA; text-align:center">No hay iniciativas para los datos seleccionados</h2>
+                <h2 class="colorMod" style="text-align:center">No hay iniciativas para los datos seleccionados</h2>
             @else
+            <h2 class="colorMod" style="text-align:center">Iniciativas</h2>
             <table id="table">
                 <thead>
                     <tr>
@@ -149,8 +226,9 @@
 
         <div>
             @if (count($iniciativasUnidades) == 0)
-                <h2 style="color: #0070BA; text-align:center">No hay unidades para los datos seleccionados</h2>
+                <h2 class="colorMod" style="text-align:center">No hay unidades para los datos seleccionados</h2>
             @else
+                <h2 class="colorMod" style="text-align:center">Unidades</h2>
                 <table id="table">
                     <thead>
                         <tr>
@@ -176,6 +254,7 @@
         </div>
 
         <div >
+            <h2 class="colorMod" style="text-align:center">Costos</h2>
             <table id="table">
                 <thead>
                     <tr>
@@ -198,9 +277,8 @@
                 </tr>
             </table>
         </div>
-        <p style="font-size: 10; text-align:center;"><strong>Datos obtenidos </strong><span> desde {{ $fechaInicio }} hasta
-            {{ $fechaFinal }}</span></p>
-        <p style="text-align: center;">PDF generado en: <a href="camanchaca.vinculamos.org">camanchaca.vinculamos.org</a> | Compania Pesquera Camanchaca SA</p>
+
+        <footer style="text-align: center;">PDF generado en: <a style="font-weight:bold; color:white;" href="camanchaca.vinculamos.org">camanchaca.vinculamos.org</a> | Compañia Pesquera Camanchaca SA</footer>
 
     </body>
 
