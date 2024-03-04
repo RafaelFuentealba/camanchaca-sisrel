@@ -22,6 +22,7 @@
             body {
             margin: 0;
             margin-bottom: 40px;
+            font-family: Arial, Helvetica, sans-serif;
             }
             footer {
             background-color: #0070BA;
@@ -91,6 +92,8 @@
             .colorMod{
                 color: black;
             }
+
+
             </style>
     </head>
 
@@ -150,7 +153,7 @@
                     </tr>
                     <tr>
                         <th class="tdMod colorMod titulo">Organizaciones en iniciativas:</th>
-                        <td class="tdMod colorMod ">
+                        <td class="tdMod colorMod">
                             <span>{{ $iniciativasOrganizaciones }}</span>
                         </td>
                     </tr>
@@ -254,7 +257,7 @@
         </div>
 
         <div >
-            <h2 class="colorMod" style="text-align:center">Costos</h2>
+            <h2 class="colorMod" style="text-align:center">Financiamiento</h2>
             <table id="table">
                 <thead>
                     <tr>

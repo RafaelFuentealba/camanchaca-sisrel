@@ -166,7 +166,7 @@
                                     <div class="form-group">
                                         <label>Pilar</label> <label for="" style="color: red;">*</label><i
                                             data-toggle="tooltip" data-placement="right"
-                                            title="Pilar programa Camanchaca Amiga" class="fas fa-info-circle"></i>
+                                            title="Pilar relacionado" class="fas fa-info-circle"></i>
                                         @if (isset($iniciativa))
                                             <select class="form-control select2" id="pilar" name="pilar"
                                                 style="width: 100%">

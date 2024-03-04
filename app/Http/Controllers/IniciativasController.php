@@ -400,7 +400,7 @@ class IniciativasController extends Controller
 
         if (!$evalCrear)
             return redirect()->back()->with('errorEvaluacion', 'Ocurrió un error al registrar la evaluación de la iniciativa, intente más tarde')->withInput();
-        return redirect()->route('admin.iniciativas.index')->with('exitoEvaluacion', 'La evaluación de la iniciativa fue registrada correctamente.');
+        return redirect()->route('admin.iniciativas.show', $request->iniciativa)->with('exitoEvaluacion', 'La evaluación de la iniciativa fue registrada correctamente.');
     }
 
     public function actualizarEvaluacion(Request $request, $eval_codigo)
@@ -489,7 +489,7 @@ class IniciativasController extends Controller
 
         if (!$evalActualizar)
             return redirect()->back()->with('errorEvaluacion', 'Ocurrió un error al actualizar la evaluación de la iniciativa, intente más tarde')->withInput();
-        return redirect()->route('admin.iniciativas.index')->with('exitoEvaluacion', 'La evaluación de la iniciativa fue actualizada correctamente.');
+        return redirect()->route('admin.iniciativas.show', $request->iniciativa)->with('exitoEvaluacion', 'La evaluación de la iniciativa fue registrada correctamente.');
     }
 
     public function eliminarEvaluacion($eval_codigo)
