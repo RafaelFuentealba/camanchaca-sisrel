@@ -246,6 +246,18 @@ class HomeController extends Controller
         ]);
     }
 
+    public function obtenerDatosComunas(Request $request)
+    {
+        if (isset($request->region)) {
+            $comunas = Comunas::select('comunas.comu_codigo', 'comunas.comu_nombre', 'regiones.regi_nombre')
+                ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
+                ->where('regiones.regi_nombre', $request->region)
+                ->get();
+            return response()->json(['comunas' => $comunas, 'success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
     public function generarReporte(Request $request)
     {
 

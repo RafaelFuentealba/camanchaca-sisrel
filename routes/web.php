@@ -60,6 +60,7 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin-donaciones', [HomeController::class, 'DonacionesIndex'])->name('admin.index.donaciones');
     Route::post('admin/dashboard/obtener/datos', [HomeController::class, 'DonacionesData']);
     Route::post('admin/dashboard/obtener/comunas', [HomeController::class, 'ObtenerComunas']);
+    Route::post('admin/dashboard/obtener/regiones', [HomeController::class, 'obtenerDatosComunas'])->name('admin.obtener.regiones');
     Route::post('admin/dashboard/obtener/organizaciones', [HomeController::class, 'ObtenerOrganizaciones']);
     Route::post('admin/dashboard/obtener/datos-actividades', [HomeController::class, 'ActividadesData']);
     // fin rutas para dashboard
