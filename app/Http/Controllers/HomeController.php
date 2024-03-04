@@ -234,6 +234,7 @@ class HomeController extends Controller
             'organizacionesIni' => $iniciativasOrganizaciones,
             'actividades' => $cantidadActividades,
             'inversion' => $costosDinero + $costosEspecies + $costosInfra + $costosRrhh + $costosDonaciones,
+            'monto_donado' => $costosDonaciones,
             'ods' => $cantidadODS,
             'objetivos' => $objetivosDesarrollo,
             'odsvinculados' => $odsVinculados,

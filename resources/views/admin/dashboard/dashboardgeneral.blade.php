@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                             <div class="card card-statistic-2">
                                 <div class="card-icon l-bg-cyan">
                                     <i class="fab fa-slack"></i>
@@ -70,7 +70,26 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3">
+                            <div class="card card-statistic-2">
+                                <div class="card-icon l-bg-red">
+                                    <i class="fas fa-clipboard"></i>
+                                </div>
+                                <div class="card-wrap">
+                                    <div class="padding-20">
+                                        <div class="text-right">
+                                            <h3 class="font-light mb-0">
+                                                <i class="ti-arrow-up text-success"></i> {{ $actividades }}
+                                            </h3>
+                                            <h6 class="text-muted">Actividades</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                             <div class="card card-statistic-2">
                                 <div class="card-icon l-bg-green">
                                     <i class="fas fa-hotel"></i>
@@ -89,7 +108,7 @@
                         </div>
 
 
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-12">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3">
                             <div class="card card-statistic-2">
                                 <div class="card-icon l-bg-orange">
                                     <i class="fas fa-dollar-sign"></i>
@@ -129,26 +148,10 @@
                                 </div>
                             </div>
                         </div> --}}
+
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-12">
-                            <div class="card card-statistic-2">
-                                <div class="card-icon l-bg-red">
-                                    <i class="fas fa-hotel"></i>
-                                </div>
-                                <div class="card-wrap">
-                                    <div class="padding-20">
-                                        <div class="text-right">
-                                            <h3 class="font-light mb-0">
-                                                <i class="ti-arrow-up text-success"></i> {{ $organizacionesAct }}
-                                            </h3>
-                                            <h6 class="text-muted">Organizaciones en actividades</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                             <div class="card card-statistic-2">
@@ -161,7 +164,7 @@
                                             <h3 class="font-light mb-0">
                                                 <i class="ti-arrow-up text-success"></i> {{ $organizacionesIni }}
                                             </h3>
-                                            <h6 class="text-muted">Organizaciones en iniciativas</h6>
+                                            <h6 class="text-muted">Org. en iniciativas</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -171,20 +174,23 @@
                         <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                             <div class="card card-statistic-2">
                                 <div class="card-icon l-bg-red">
-                                    <i class="fas fa-clipboard"></i>
+                                    <i class="fas fa-hotel"></i>
                                 </div>
                                 <div class="card-wrap">
                                     <div class="padding-20">
                                         <div class="text-right">
                                             <h3 class="font-light mb-0">
-                                                <i class="ti-arrow-up text-success"></i> {{ $actividades }}
+                                                <i class="ti-arrow-up text-success"></i> {{ $organizacionesAct }}
                                             </h3>
-                                            <h6 class="text-muted">Actividades</h6>
+                                            <h6 class="text-muted">Org. en actividades</h6>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
+
 
                         <div class="col-lg-3 col-md-3 col-sm-3 col-12">
                             <div class="card card-statistic-2">
@@ -198,6 +204,30 @@
                                                 <i class="ti-arrow-up text-success"></i> {{ $donaciones }}
                                             </h3>
                                             <h6 class="text-muted">Cantidad de donaciones</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xl-3">
+                            <div class="card card-statistic-2">
+                                <div class="card-icon l-bg-red">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="card-wrap">
+                                    <div class="padding-20">
+                                        <div class="text-right">
+                                            <h3 class="font-light mb-0" data-toggle="tooltip" data-placement="right"
+                                                title="{{ '$' . number_format($monto_donado, 0, ',', '.') }}">
+                                                <i class="ti-arrow-up text-success"></i>
+                                                {{-- @if ($monto_donado > 1000000)
+                                                    {{ number_format($monto_donado / 1000000, 1) . ' M' }}
+                                                @else --}}
+                                                {{ '$' . number_format($monto_donado, 0, ',', '.') }}
+                                                {{-- @endif --}}
+                                            </h3>
+                                            <h6 class="text-muted">Monto total donado</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -347,7 +377,8 @@
                                             <div class="col-xl-3 col-md-3 col-lg-6">
                                                 <div class="form-group"><label for="regi_codigo">Región</label>
                                                     <select name="regi_codigo" id="regi_codigo"
-                                                        class="select2 form-control" style="width: 100%" onchange="cargarComunas()">
+                                                        class="select2 form-control" style="width: 100%"
+                                                        onchange="cargarComunas()">
                                                         <option value="">Seleccione...</option>
                                                         @forelse ($regiones as $region)
                                                             <option value="{{ $region->regi_nombre }}">
