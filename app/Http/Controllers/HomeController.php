@@ -103,6 +103,7 @@ class HomeController extends Controller
             ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
         $costosDonaciones = Donaciones::select(DB::raw('IFNULL(sum(dona_monto), 0) as total'))->where('dona_vigente', 'S')
+            ->where('donaciones.dona_estado', 'Aprobada')
             ->join('comunas', 'comunas.comu_codigo', 'donaciones.comu_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo');
 
@@ -233,7 +234,7 @@ class HomeController extends Controller
             'organizacionesAct' => $actividadesOrganizaciones,
             'organizacionesIni' => $iniciativasOrganizaciones,
             'actividades' => $cantidadActividades,
-            'inversion' => $costosDinero + $costosEspecies + $costosInfra + $costosRrhh + $costosDonaciones,
+            'inversion' => $costosDinero + $costosEspecies + $costosInfra + $costosRrhh,
             'monto_donado' => $costosDonaciones,
             'ods' => $cantidadODS,
             'objetivos' => $objetivosDesarrollo,
@@ -370,6 +371,7 @@ class HomeController extends Controller
         $costosDonaciones = Donaciones::select(DB::raw('IFNULL(sum(dona_monto), 0) as total'))->where('dona_vigente', 'S')
             ->join('comunas', 'comunas.comu_codigo', 'donaciones.comu_codigo')
             ->join('regiones', 'regiones.regi_codigo', 'comunas.regi_codigo')
+            ->where('donaciones.dona_estado', 'Aprobada')
             ->whereBetween('donaciones.dona_fecha_entrega', [$fechaInicio, $fecha_final_add]);
         //Agregar cuando se aplique filtro por donaciones
         // ->leftjoin('unidades', 'unidades.comu_codigo', 'comunas.comu_codigo')
