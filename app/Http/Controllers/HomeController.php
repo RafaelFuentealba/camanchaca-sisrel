@@ -265,6 +265,7 @@ class HomeController extends Controller
         //Obtener los datos del formulario
         $region = $request->input('regi_codigo');
         $comuna = $request->input('comu_codigo');
+        return $comuna;
         $division = $request->input('divi_codigo');
         $fechaInicio = $request->input('fecha_inicio');
         $fechaFinal = $request->input('fecha_final');

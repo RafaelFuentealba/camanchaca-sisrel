@@ -391,8 +391,8 @@
                                             </div>
 
                                             <div class="col-xl-3 col-md-3 col-lg-6">
-                                                <div class="form-group"><label for="comu_nombre">Comuna</label>
-                                                    <select name="comu_codigo" id="comu_nombre"
+                                                <div class="form-group"><label for="comu_codigo">Comuna</label>
+                                                    <select name="comu_codigo" id="comu_codigo"
                                                         class="select2 form-control" style="width: 100%">
                                                         <option value="">Seleccione...</option>
                                                         @forelse ($comunas as $comuna)

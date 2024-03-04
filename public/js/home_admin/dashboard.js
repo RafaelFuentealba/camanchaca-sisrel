@@ -154,7 +154,7 @@ function cargarComunas() {
         .then((data) => {
             var opciones = "<option value=''>Seleccione...</option>";
             for (let i in data.comunas) {
-                opciones += `<option value='${data.comunas[i].comu_codigo}'>${data.comunas[i].comu_nombre}</option>`;
+                opciones += `<option value='${data.comunas[i].comu_nombre}'>${data.comunas[i].comu_nombre}</option>`;
             }
             $("#comu_codigo").html(opciones);
         });
