@@ -1,0 +1,7 @@
+[22-Jan-2024 14:07:15 UTC] PHP Fatal error:  Uncaught Error: Class 'Whoops\Inspector\InspectorFactory' not found in /home/wwvinc/camanchaca.vinculamos.org/vendor/filp/whoops/src/Whoops/Run.php:87
+Stack trace:
+#0 /home/wwvinc/camanchaca.vinculamos.org/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(534): Whoops\Run->__construct()
+#1 /home/wwvinc/camanchaca.vinculamos.org/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(519): Illuminate\Foundation\Exceptions\Handler->renderExceptionWithWhoops(Object(Error))
+#2 /home/wwvinc/camanchaca.vinculamos.org/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(503): Illuminate\Foundation\Exceptions\Handler->renderExceptionContent(Object(Error))
+#3 /home/wwvinc/camanchaca.vinculamos.org/vendor/laravel/framework/src/Illuminate/Foundation/Exceptions/Handler.php(482): Illuminate\Foundation\Exceptions\Handler->convertExceptionToResponse(Object(Error))
+#4 /home/wwvinc/camanchaca.vinculamos.org/vendor/laravel/framework/src/Illuminate/Foundation/Except in /home/wwvinc/camanchaca.vinculamos.org/vendor/filp/whoops/src/Whoops/Run.php on line 87

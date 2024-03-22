@@ -107,7 +107,7 @@
 
         <div style="display: flex; justify-content: space-between; padding-top: 5%; text-align:center;">
             <div>
-                <h2 class="colorMod">Compañía Pesquera Camanchaca S.A</h2>
+                <h2 class="colorMod">Camanchaca S.A</h2>
                 <h3 class="colorMod">Reporte de actividades</h3>
             </div>
             <div>
@@ -121,7 +121,7 @@
                 <table id="table">
                     <tr>
                         <th class="tdMod colorMod titulo">Región:</th>
-                        <td class="tdMod colorMod ">
+                        <td class="tdMod colorMod " style="text-align: center;">
                             @if (Request::get('regi_codigo') != null)
                                 <span>{{ Request::get('regi_codigo') }}</span>
                             @else
@@ -131,7 +131,7 @@
                     </tr>
                     <tr>
                         <th class="tdMod colorMod titulo">División:</th>
-                        <td class="tdMod colorMod ">
+                        <td class="tdMod colorMod " style="text-align: center;">
                             @if (Request::get('divi_codigo') != null)
                                 <span>{{ Request::get('divi_codigo') }}</span>
                             @else
@@ -141,19 +141,19 @@
                     </tr>
                     <tr>
                         <th class="tdMod colorMod titulo">Organizaciones:</th>
-                        <td class="tdMod colorMod ">
+                        <td class="tdMod colorMod " style="text-align: center;">
                             <span>{{ $cantidadOrganizaciones }}</span>
                         </td>
                     </tr>
                     <tr>
                         <th class="tdMod colorMod titulo">Donaciones:</th>
-                        <td class="tdMod colorMod ">
+                        <td class="tdMod colorMod " style="text-align: center;">
                             <span>{{ $cantidadDonaciones }}</span>
                         </td>
                     </tr>
                     <tr>
                         <th class="tdMod colorMod titulo">Organizaciones en iniciativas:</th>
-                        <td class="tdMod colorMod">
+                        <td class="tdMod colorMod" style="text-align: center;">
                             <span>{{ $iniciativasOrganizaciones }}</span>
                         </td>
                     </tr>
@@ -163,7 +163,7 @@
                 <table id="table">
                     <tr>
                         <th class="tdMod colorMod titulo">Comuna:</th>
-                        <td class="tdMod colorMod ">
+                        <td class="tdMod colorMod " style="text-align: center;">
                             @if (Request::get('comu_codigo') != null)
                                 <span>{{ Request::get('comu_codigo') }}</span>
                             @else
@@ -173,19 +173,19 @@
                     </tr>
                     <tr>
                         <th class="tdMod colorMod titulo">Iniciativas:</th>
-                        <td class="tdMod colorMod ">
+                        <td class="tdMod colorMod " style="text-align: center;">
                             <span>{{ $cantidadIniciativas }}</span>
                         </td>
                     </tr>
                     <tr>
                         <th class="tdMod colorMod titulo">Actividades:</th>
-                        <td class="tdMod colorMod ">
+                        <td class="tdMod colorMod " style="text-align: center;">
                             <span>{{ $cantidadActividades }}</span>
                         </td>
                     </tr>
                     <tr>
                         <th class="tdMod colorMod titulo">Organizaciones en actividades:</th>
-                        <td class="tdMod colorMod ">
+                        <td class="tdMod colorMod " style="text-align: center;">
                             <span>{{ $actividadesOrganizaciones }}</span>
                         </td>
                     </tr>

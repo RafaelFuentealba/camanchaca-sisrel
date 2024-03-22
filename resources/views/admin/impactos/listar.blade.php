@@ -46,10 +46,10 @@
                     </div>
                     <div class="card">
                         <div class="card-header">
-                            <h4>Listado de impactos</h4>
+                            <h4>Listado de Pilares de modelo de sostenibilidad</h4>
                             <div class="card-header-action">
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#modalCrearImpacto"><i class="fas fa-plus"></i> Nuevo Impacto</button>
+                                    data-target="#modalCrearImpacto"><i class="fas fa-plus"></i> Nuevo Pilar de modelo de sostenibilidad</button>
                             </div>
                         </div>
                         <div class="card-body">
