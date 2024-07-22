@@ -169,6 +169,40 @@ class EntornosController extends Controller
 
         return redirect()->route('admin.subentornos.listar')->with('exitoSubEntorno', 'El subentorno se registró correctamente.');
     }
+    
+    public function CrearSubentornos2(Request $request)
+    {
+        $validacion = $request->validate(
+            [
+                'sube_nombre' => 'required|max:50|min:1',
+            ],
+            [
+                'sube_nombre.required' => 'Es necesario que se le asigne un nombre al sub entorno.',
+                'sube_nombre.max' => 'El nombre del sub entorno no debe superar los 100 carácteres.',
+                'sube_nombre.min' => 'El nombre del sub entorno es demasiado corto.',
+            ]
+        );
+
+        if (!$validacion) {
+            return redirect()->back()->withErrors($validacion)->withInput();
+        }
+
+        $subentorno = SubEntornos::create([
+            'sube_nombre' => $request->sube_nombre,
+            'sube_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'sube_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'sube_vigente' => 'S',
+            'sube_rut_mod' => Session::get('admin')->usua_rut,
+            'sube_rol_mod' => Session::get('admin')->rous_codigo,
+            'ento_codigo' => $request->codigo,
+        ]);
+
+        if (!$subentorno) {
+            return redirect()->back()->with('errorSubEntorno', 'Ocurrió un error al registrar el subentorno.');
+        }
+
+        return redirect()->back();
+    }
 
 
 

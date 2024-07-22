@@ -9,7 +9,7 @@ class TipoRrhh extends Model
 {
     use HasFactory;
     protected $table = "tipo_rrhh";
-
+    protected $primaryKey = 'tirh_codigo';
     public $timestamps = false;
 
     protected $fillable = [

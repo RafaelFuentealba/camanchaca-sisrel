@@ -66,13 +66,13 @@
             <ul class="dropdown-menu">
                 <li><a class="nav-link" href="{{ route('admin.actividad.crear') }}">Ingresar actividad</a></li>
                 <li><a class="nav-link" href="{{ route('admin.actividad.listar') }}">Listar actividades</a></li>
-                <li><a class="nav-link" href="{{ route('admin.donaciones.crear') }}">Ingresar donación</a></li>
-                <li><a class="nav-link" href="{{ route('admin.donaciones.listar') }}">Listar donaciones</a></li>
+                {{-- <li><a class="nav-link" href="{{ route('admin.donaciones.crear') }}">Ingresar donación</a></li>
+                <li><a class="nav-link" href="{{ route('admin.donaciones.listar') }}">Listar donaciones</a></li> --}}
             </ul>
         </li>
-        <li class="{{ Route::is('admin.map') ? 'dropdown active' : 'dropdown' }}">
+        {{-- <li class="{{ Route::is('admin.map') ? 'dropdown active' : 'dropdown' }}">
             <a class="nav-link" href="{{ route('admin.map') }}"><i data-feather="map"></i><span>Mapa</span></a>
-        </li>
+        </li> --}}
         </li>
         {{-- <li
             class="{{ Route::is('admin.unidades.listar') ||
@@ -113,8 +113,9 @@
                 <li><a class="nav-link" href="{{ route('admin.operacion.listar') }}">Evaluación de operaciones</a></li>
                 <li><a class="nav-link" href="{{ route('admin.evaluacionprensa.listar') }}">Evaluación de prensa</a></li>
                 <li><a class="nav-link" href="{{ route('admin.entornos.listar') }}">Entornos</a></li>
-                <li><a class="nav-link" href="{{ route('admin.impactos.listar') }}">Pilares de modelo de sostenibilidad</a></li>      
+                <li><a class="nav-link" href="{{ route('admin.impactos.listar') }}">Pilares de modelo de sostenibilidad</a></li>
                 <li><a class="nav-link" href="{{ route('admin.divisiones.listar') }}">Divisiones</a></li>
+                <li><a class="nav-link" href="{{ route('admin.especies.listar') }}">Especies</a></li>
                 <li><a class="nav-link" href="{{ route('admin.listar.org') }}">Organizaciones</a></li>
                 <li><a class="nav-link" href="{{ route('admin.pilares.listar') }}">Pilares</a></li>
                 <li><a class="nav-link" href="{{ route('admin.subentornos.listar') }}">Subentornos</a></li>

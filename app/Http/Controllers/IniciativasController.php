@@ -240,6 +240,23 @@ class IniciativasController extends Controller
         return json_encode(['status' => true, 'resultado' => $submecanismo]);
     }
 
+    public function obtenerMecanismo(Request $request)
+{
+    $submecanismo  = request('submecanismo');
+    $mecanismo = DB::table('mecanismo')
+        ->join('submecanismo', 'submecanismo.meca_codigo', '=', 'mecanismo.meca_codigo')
+        ->where('submecanismo.subm_codigo', $submecanismo)
+        ->first();
+
+        $meca_nombre = $mecanismo->meca_nombre;
+        $meca_codigo = $mecanismo->meca_codigo;
+    return json_encode(['status' => true, 'meca_nombre' => $meca_nombre, 'meca_codigo' => $meca_codigo]);
+}
+
+
+
+
+
     public function aprobar($inic_codigo)
     {
         $inicVerificar = Iniciativas::where('inic_codigo', $inic_codigo)->first();
@@ -974,8 +991,7 @@ class IniciativasController extends Controller
                 'pilar' => 'required',
                 'implementacion' => 'required',
                 'nombreresponsable' => 'max:100',
-                'mecanismo' => 'required',
-                'submecanismo' => 'required',
+
                 'frecuencia' => 'required'
             ],
             [
@@ -989,8 +1005,7 @@ class IniciativasController extends Controller
                 'pilar.required' => 'El pilar es requerido.',
                 'implementacion.required' => 'El formato de implementación es requerido.',
                 'nombreresponsable.max' => 'El nombre del encargado responsable excede el máximo de caracteres permitidos (100).',
-                'mecanismo.required' => 'El mecanismo asociado es requerido.',
-                'submecanismo.required' => 'La actividad asociada es requerida.',
+
                 'frecuencia.required' => 'La frecuencia es requerida.'
             ]
         );
@@ -1267,14 +1282,39 @@ class IniciativasController extends Controller
         foreach ($inimListar as $registro) {
             array_push($inimCodigos, $registro->impa_codigo);
         }
+        
+        $subgrupos = Entornos::all();
+        $socios = SubEntornos::all();
+        
         return view('admin.iniciativas.paso2', [
             'iniciativa' => $inicAgregada,
             'regiones' => $listarRegiones,
             'participantes' => $listarParticipantes,
             'entornos' => $listarEntornos,
             'impactos' => $listarImpactos,
-            'iniciativasImpactos' => $inimCodigos
+            'iniciativasImpactos' => $inimCodigos,
+            'socios' => $socios,
+            'subgrupos' => $subgrupos
         ]);
+    }
+    
+    public function agregarExternos(Request $request)
+    {
+        try {
+            $participantes = new Participantes();
+            $participantes->inic_codigo = $request->inic_codigo;
+            $participantes->sube_codigo = $request->sube_codigo;
+            $participantes->part_cantidad_inicial = $request->inpr_total;
+            $participantes->save();
+
+
+            $participantes = Participantes::where('inic_codigo', $request->inic_codigo)->get();
+
+
+            return json_encode(["estado" => true, "resultado" => $participantes]);
+        } catch (\Throwable $th) {
+            return json_encode(["estado" => false, "resultado" => "error: " . $th   ]);
+        }
     }
 
     public function actualizarPaso2(Request $request, $inic_codigo)
@@ -1290,15 +1330,11 @@ class IniciativasController extends Controller
             ]
         );
 
-        $inubVerificar = IniciativasUbicaciones::where('inic_codigo', $request->iniciativa)->count();
-        if ($inubVerificar == 0)
-            return redirect()->back()->with('errorPaso2', 'Debe registrar la territorialidad de la iniciativa.')->withInput();
+        
         $partVerificar = Participantes::where('inic_codigo', $request->iniciativa)->count();
         if ($partVerificar == 0)
             return redirect()->back()->with('errorPaso2', 'Debe registrar los subentornos esperados de la iniciativa.')->withInput();
-        $resuVerificar = Resultados::where('inic_codigo', $request->iniciativa)->count();
-        if ($resuVerificar == 0)
-            return redirect()->back()->with('errorPaso2', 'Debe registrar los resultados esperados de la iniciativa.')->withInput();
+
 
         // elimina los registros antiguos y prepara datos para insertar en tabla iniciativas_impactos
         IniciativasImpactos::where('inic_codigo', $inic_codigo)->delete();

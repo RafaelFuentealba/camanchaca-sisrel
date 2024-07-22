@@ -43,8 +43,8 @@
                             <div class="dropdown d-inline">
                                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Iniciativa</button>
                                 <div class="dropdown-menu dropright">
-                                    <a href="{{ route('digitador.cobertura.index', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-users"></i>Ingresar cobertura</a>
-                                    <a href="{{ route('digitador.resultados.index', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-flag"></i>Ingresar resultados</a>
+                                    {{-- <a href="{{ route('digitador.cobertura.index', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-users"></i>Ingresar cobertura</a>
+                                    <a href="{{ route('digitador.resultados.index', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-flag"></i>Ingresar resultados</a> --}}
                                     <a href="{{ route('digitador.evaluacion.index', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-file-signature"></i>Ingresar evaluación</a>
                                     <a href="{{ route('digitador.evidencia.listar', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-paperclip"></i> Adjuntar evidencia</a>
                                 </div>

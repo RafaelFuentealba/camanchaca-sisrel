@@ -88,8 +88,12 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/iniciativas/comuna', [IniciativasController::class, 'comunasByRegion']);
     Route::get('admin/iniciativas/unidad', [IniciativasController::class, 'unidadesByComuna']);
     Route::get('admin/iniciativa/crear/paso1', [IniciativasController::class, 'crearPaso1'])->name('admin.paso1.crear');
+    
+    Route::post('admin/iniciativas/agregar/participantes-externos', [IniciativasController::class, 'agregarExternos']);
+    Route::post('admin/crear-socios/', [AdminController::class, 'crearSocios'])->name('admin.crear.socios');
     // TODO: RUTA PARA OBTENER SUBMECANISMO
     Route::post('admin/iniciativa/obtener/submecanismos', [IniciativasController::class, 'obternerSubmecanismos']);
+
     Route::get('admin/iniciativa/{inic_codigo}/editar/paso1', [IniciativasController::class, 'editarPaso1'])->name('admin.paso1.editar');
     Route::put('admin/iniciativa/{inic_codigo}/paso1', [IniciativasController::class, 'actualizarPaso1'])->name('admin.paso1.actualizar');
     Route::post('admin/iniciativa/crear/paso1', [IniciativasController::class, 'verificarPaso1'])->name('admin.paso1.verificar');
@@ -278,10 +282,19 @@ Route::middleware('verificar.admin')->group(function () {
     Route::put('admin/pilares/{pila_codigo}/editar', [AdminController::class, 'EditarPilares'])->name('admin.pilares.actualizar');
     Route::delete('admin/pilares/{pila_codigo}/borrar', [AdminController::class, 'EliminarPilares'])->name('admin.pilares.borrar');
     // fin rutas para gestionar pilares
+    
+    
+    // inicio rutas para gestionar especies
+    Route::get('admin/especies/listar', [AdminController::class, 'ListarEspecies'])->name('admin.especies.listar');
+    Route::post('admin/especies/crear', [AdminController::class, 'CrearEspecies'])->name('admin.especies.guardar');
+    Route::put('admin/especies/{especie_codigo}/editar', [AdminController::class, 'EditarEspecies'])->name('admin.especies.actualizar');
+    Route::delete('admin/especies/{especie_codigo}/borrar', [AdminController::class, 'EliminarEspecies'])->name('admin.especies.borrar');
+    // fin rutas para gestionar especies
 
     // inicio rutas para gestionar subentornos
     Route::get('admin/subentornos/listar', [EntornosController::class, 'ListarSubentornos'])->name('admin.subentornos.listar');
     Route::post('admin/subentornos/crear', [EntornosController::class, 'CrearSubentornos'])->name('admin.subentornos.guardar');
+    Route::post('admin/subentornos/crear', [EntornosController::class, 'CrearSubentornos2'])->name('admin.subentornos.guardar2');
     Route::put('admin/subentornos/{sube_codigo}/editar', [EntornosController::class, 'EditarSubentornos'])->name('admin.subentornos.actualizar');
     Route::delete('admin/subentornos/{sube_codigo}/borrar', [EntornosController::class, 'EliminarSubentornos'])->name('admin.subentornos.borrar');
     // fin rutas para gestionar subentornos
@@ -601,3 +614,6 @@ Route::middleware('verificar.superadmin')->group(function () {
     Route::post('superadmin/perfil/{usua_rut}/seguridad', [SuperadminController::class, 'actualizarClavePerfil'])->name('superadmin.clave.actualizar');
     // fin rutas perfil de usuario superadmin
 });
+
+
+Route::post('iniciativas/obtener-mecanismos', [IniciativasController::class, 'obtenerMecanismo']);

@@ -31,12 +31,12 @@
                                             id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
                                             aria-expanded="false">Iniciativa</button>
                                         <div class="dropdown-menu dropright">
-                                            <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                            {{-- <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon"><i class="fas fa-users"></i>Ingresar
                                                 cobertura</a>
                                             <a href="{{ route('admin.resultados.index', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon"><i class="fas fa-flag"></i>Ingresar
-                                                resultados</a>
+                                                resultados</a> --}}
                                             <a href="{{ route('admin.evaluacion.index', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon"><i class="fas fa-file-signature"></i>Ingresar
                                                 evaluación</a>
@@ -274,7 +274,7 @@
                                         @endif
                                     </div>
                                 </div> --}}
-                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                <div class="col-xl-4 col-md-4 col-lg-4" style="display: none;">
                                     <div class="form-group">
                                         <label>Mecanismo</label> <label for="" style="color: red;">*</label>
                                         @if (isset($iniciativa))
@@ -360,6 +360,8 @@
                                         @endif
                                     </div>
                                 </div>
+
+
                             </div>
                             <div class="row">
                                 <div class="col-xl-4 col-md-4 col-lg-4">
@@ -460,45 +462,36 @@
             </div>
         </div>
     </section>
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-        crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
     <script>
         $(document).ready(function() {
-            // TODO:Función para cargar dinamicamente las actividades de acuerdo al mecanismo al que pertenecen
-            $('#mecanismo').on('change', function() {
-                var mecanismo = $('#mecanismo').val();
-                $.ajax({
-                    type: 'POST',
-                    url: `${window.location.origin}/admin/iniciativa/obtener/submecanismos`,
-                    data: {
-                        meca_codigo: mecanismo
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(mecaListar) {
-                        respuesta = JSON.parse(mecaListar);
-                        $('#submecanismo').find('option').not(':first').remove();
-                        $('#submecanismo').prop('selectedIndex', 0);
-                        if (!respuesta.status) {
+    mecanismosbySubmecanismos();
+});
 
-                            $('#submecanismo').append(new Option('No exiten registros', '-1'))
-                            return
-                        }
+function mecanismosbySubmecanismos() {
+    $('#submecanismo').on('change', function() {
+        console.log('submecanismo:' + $('#submecanismo').val());
+        $.ajax({
+            url: window.location.origin + '/camanchaca/iniciativas/obtener-mecanismos',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                _token: '{{ csrf_token() }}',
+                submecanismo: $('#submecanismo').val()
+            },
+            success: function(data) {
+                console.log(data);
+                $('#mecanismo').empty();
+                $('#mecanismo').append(
+                    `<option value="${data.meca_codigo}">${data.meca_nombre}</option>`
+                    );
+            }
+        });
+    });
+}
 
-                        aSubmecanismo = respuesta.resultado;
-                        aSubmecanismo.forEach(submecanismo => {
-                            $('#submecanismo').append(new Option(submecanismo
-                                .subm_nombre, submecanismo.subm_codigo))
-                        });
-
-                    },
-                    error: function(error) {
-                        console.error(error);
-                    }
-                })
-            })
-        })
     </script>
 
 @endsection

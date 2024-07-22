@@ -31,6 +31,8 @@ use App\Models\Entornos;
 use App\Models\EvaluacionPrensa;
 use App\Models\Impactos;
 use App\Models\Pilares;
+use App\Models\SubPilares;
+use App\Models\PilarSubPilar;
 use App\Models\EvaluacionOperaciones;
 use App\Models\Iniciativas;
 use App\Models\IniciativasImpactos;
@@ -39,6 +41,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Stmt\Return_;
+use App\Models\TipoRrhh;
 
 class AdminController extends Controller
 {
@@ -521,7 +524,113 @@ class AdminController extends Controller
             'comunas' => Comunas::where('comu_vigente', 'S')->get()
         ]);
     }
+    
+    public function ListarEspecies()
+    {
+        return view('admin.especies.listar', [
+            'pilares' => Pilares::all(),
+            'subpilares' => SubPilares::all(),
+            'especies' => TipoRrhh::all(),
+        ]);
+    }
+    
+    public function CrearEspecies(Request $request)
+    {
+        $validacion = $request->validate(
+            [
+                'tirh_nombre' => 'required|max:50|min:1',
+            ]
+        );
 
+        if (!$validacion) {
+            return redirect()->back()->withErrors($validacion)->withInput();
+        }
+
+        $especie = TipoRrhh::create([
+            'tirh_nombre' => $request->tirh_nombre,
+            'tirh_valor' => $request->tirh_valor,
+            'pila_rut_mod' => Session::get('admin')->usua_rut,
+            'pila_rol_mod' => Session::get('admin')->rous_codigo,
+        ]);
+
+        if (!$especie) {
+            return redirect()->back()->with('errorPilar', 'Ocurrió un error al registrar la especie.');
+        }
+
+        return redirect()->route('admin.especies.listar')->with('exitoPilar', 'La especie se registró correctamente.');
+    }
+    
+    public function EditarEspecies(Request $request, $tirh_codigo)
+    {
+
+
+        $pilarActualizar = TipoRrhh::where('tirh_codigo', $tirh_codigo)->update([
+            'tirh_nombre' => $request->tirh_nombre,
+            'tirh_valor' => $request->tirh_valor
+        ]);
+        if (!$pilarActualizar)
+            return redirect()->back()->with('errorPilar', 'Ocurrió un error al actualizar la especie, intente más tarde.');
+        return redirect()->route('admin.especies.listar')->with('exitoPilar', 'La especie fue actualizado correctamente.');
+    }
+    
+    public function EliminarEspecies($especie_codigo)
+    {
+        
+        // Eliminar
+        $especie = TipoRrhh::where('tirh_codigo', $especie_codigo)->first();
+        $especie->delete();
+        return redirect()->route('admin.especies.listar')->with('exitoPilar', 'La especie fue eliminado correctamente.');
+    }
+
+    public function crearSocios(Request $request)
+    {
+        $validacion = $request->validate(
+            [
+                'nombre' => 'required|max:255',
+                'nombre_contraparte' => 'required|max:255',
+                /* 'domicilio' => 'required|max:255', */
+                /* 'telefono' => 'required|max:255', */
+                /* 'email' => 'required|max:255', */
+                /* 'sedesT' => 'required_without_all:nacional', // 'sedesT' es requerido si 'nacional' no está marcado
+                'nacional' => 'required_without_all:sedesT', // 'nacional' es requerido si no se selecciona ninguna sede */
+
+            ],
+            [
+                'nombre.required' => 'El nombre del socio comunitario es requerido.',
+                'nombre.max' => 'El nombre del socio comunitario excede el máximo de caracteres permitidos (255).',
+                'nombre_contraparte.required' => 'El nombre de la contraparte es requerido.',
+                'nombre_contraparte.max' => 'El nombre de la contraparte excede el máximo de caracteres permitidos (255).',
+                /* 'domicilio.required' => 'El domicilio de la contraparte es requerido.',
+                'domicilio.max' => 'El domicilio de la contraparte excede el máximo de caracteres permitidos (255).',
+                'telefono.required' => 'El teléfono de la contraparte del director es requerido.',
+                'telefono.max' => 'El teléfono de la contraparte excede el máximo de caracteres permitidos (255).',
+                'email.required' => 'El email de la contraparte es requerido.',
+                'email.max' => 'El email de la contraparte excede el máximo de caracteres permitidos (255).', */
+                /* 'sedesT.required_without_all' => 'Es necesario que seleccione al menos una sede a la cual este asociada el socio comunitario.',
+                'nacional.required_without_all' => 'Es necesario que seleccione al menos una sede a la cual este asociada el socio comunitario.', */
+
+            ]
+        );
+        if (!$validacion)
+            return redirect()->route('admin.listar.socios')->with('error', 'Problemas al crear el socio comunitario.');
+
+        $MacaActi = SociosComunitarios::insertGetId([
+            'soco_nombre_socio' => $request->nombre,
+            'soco_nombre_contraparte' => $request->nombre_contraparte,
+            'soco_domicilio_socio' => $request->domicilio,
+            'soco_telefono_contraparte' => $request->telefono,
+            'soco_email_contraparte' => $request->email,
+            'grin_codigo' => $request->grupo,
+            'sugr_codigo' => $request->subgrupo ?? $request->subgrupo2,
+        ]);
+
+
+
+        return redirect()->back()->with('socoExito', 'Se agregó el socio comunitario correctamente.')->withInput();
+    }
+    
+    
+    
     public function actualizarOrganizacion(Request $request, $orga)
     {
         $validacion = $request->validate(
@@ -1103,6 +1212,7 @@ class AdminController extends Controller
     {
         return view('admin.pilares.listar', [
             'pilares' => Pilares::all(),
+            'subpilares' => SubPilares::all(),
         ]);
     }
 

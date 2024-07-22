@@ -53,12 +53,12 @@
                                             id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
                                             aria-expanded="false">Iniciativa</button>
                                         <div class="dropdown-menu dropright">
-                                            <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                            {{-- <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon"><i class="fas fa-users"></i>Ingresar
                                                 cobertura</a>
                                             <a href="{{ route('admin.resultados.index', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon"><i class="fas fa-flag"></i>Ingresar
-                                                resultados</a>
+                                                resultados</a> --}}
                                             <a href="{{ route('admin.evaluacion.index', $iniciativa->inic_codigo) }}"
                                                 class="dropdown-item has-icon"><i class="fas fa-file-signature"></i>Ingresar
                                                 evaluación</a>
@@ -87,9 +87,9 @@
                                         <tr>
                                             <th></th>
                                             <th class="text-center">Dinero</th>
+                                            <th class="text-center" style="display:none;">Especies</th>
+                                            <th class="text-center" style="display:none;">Infraestructura</th>
                                             <th class="text-center">Especies</th>
-                                            <th class="text-center">Infraestructura</th>
-                                            <th class="text-center">Recursos Humanos</th>
                                             <th class="text-center">Total</th>
                                         </tr>
                                         <tr>
@@ -109,8 +109,8 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <div class="row">
+                                            <td style="display:none;">
+                                                <div class="row" >
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="empresa-especies-total">
 
                                                     </div>
@@ -130,7 +130,7 @@
                                                     </table>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td style="display:none;">
                                                 <div class="row">
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="empresa-infra-total">
 
@@ -152,7 +152,7 @@
                                                     </table>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td >
                                                 <div class="row">
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="empresa-rrhh-total">
 
@@ -164,8 +164,8 @@
                                                 <div class="row mt-2 mr-1 ml-1">
                                                     <table class="table table-bordered table-hover small table-sm">
                                                         <tr>
-                                                            <th>Recurso</th>
-                                                            <th>Horas</th>
+                                                            <th>Especie</th>
+                                                            <th>Cantidad(KG)</th>
                                                             <th>Valorización</th>
                                                             <th></th>
                                                         </tr>
@@ -199,7 +199,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td style="display:none;">
                                                 <div class="row">
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="externo-especies-total">
 
@@ -220,7 +220,7 @@
                                                     </table>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td style="display:none;">
                                                 <div class="row">
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="externo-infra-total">
 
@@ -242,7 +242,7 @@
                                                     </table>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td >
                                                 <div class="row">
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="externo-rrhh-total">
 
@@ -254,8 +254,8 @@
                                                 <div class="row mt-2 mr-1 ml-1">
                                                     <table class="table table-bordered table-hover small table-sm">
                                                         <tr>
-                                                            <th>Recurso</th>
-                                                            <th>Horas</th>
+                                                            <th>Especie</th>
+                                                            <th>Cantidad(KG)</th>
                                                             <th>Valorización</th>
                                                             <th></th>
                                                         </tr>
@@ -403,7 +403,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="formModal">Agregar RRHH</h5>
+                <h5 class="modal-title" id="formModal">Agregar Especie</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -413,7 +413,7 @@
                     <div class="text-center" id="div-alert-rrhh">
                     </div>
                     <div class="form-group">
-                        <label>Tipo RRHH</label>
+                        <label>Especie</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
@@ -426,7 +426,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Cantidad de horas</label>
+                        <label>Cantidad(KG)</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">

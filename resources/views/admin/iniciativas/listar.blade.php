@@ -143,7 +143,7 @@
                                             <th>ID</th>
                                             <th>Nombre</th>
                                             <th>Responsable</th>
-                                            <th>Mecanismo</th>
+                                            
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -155,7 +155,7 @@
                                                     <td>{{ $iniciativa->inic_codigo }}</td>
                                                     <td>{{ $iniciativa->inic_nombre }}</td>
                                                     <td>{{ $iniciativa->inic_nombre_responsable }}</td>
-                                                    <td>{{ $iniciativa->meca_nombre }}</td>
+                                                    
                                                     <td>
                                                         @if ($iniciativa->inic_aprobada == null)
                                                             <div class="badge badge-light badge-shadow">Sin definir</div>
@@ -199,14 +199,14 @@
                                                             class="btn btn-icon btn-warning" data-toggle="tooltip"
                                                             data-placement="top" title="Adjuntar evidencia"><i
                                                                 class="fas fa-paperclip"></i></a>
-                                                        <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                                        {{-- <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
                                                             class="btn btn-icon btn-success" data-toggle="tooltip"
                                                             data-placement="top" title="Ingresar cobertura"><i
                                                                 class="fas fa-users"></i></a>
                                                         <a href="{{ route('admin.resultados.index', $iniciativa->inic_codigo) }}"
                                                             class="btn btn-icon btn-success" data-toggle="tooltip"
                                                             data-placement="top" title="Ingresar resultados"><i
-                                                                class="fas fa-flag"></i></a>
+                                                                class="fas fa-flag"></i></a> --}}
                                                         <a href="{{ route('admin.evaluacion.index', $iniciativa->inic_codigo) }}"
                                                             class="btn btn-icon btn-success" data-toggle="tooltip"
                                                             data-placement="top" title="Evaluar iniciativa"><i

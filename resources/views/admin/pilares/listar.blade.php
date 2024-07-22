@@ -164,7 +164,19 @@
                                         value="{{ old('pila_nombre') ?? @$pila->pila_nombre }}" autocomplete="off">
                                 </div>
                             </div>
+                                @if ($pila->pila_codigo == 1)
+                                <div class="form-group">
+                                    <label style="font-size: 110%">SubPilares</label>
+                                    <ul>
+                                        @foreach ($subpilares as $subpilar)
+                                            <li>
+                                                {{ $subpilar->subpr_nombre }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
 
+                                @endif
                             <div class="form-group">
                                 <label>Estado</label>
                                 <div class="input-group">

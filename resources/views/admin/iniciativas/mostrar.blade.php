@@ -58,12 +58,12 @@
                                         data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">Iniciativa</button>
                                     <div class="dropdown-menu dropright">
-                                        <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                        {{-- <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
                                             class="dropdown-item has-icon"><i class="fas fa-users"></i>Ingresar
                                             cobertura</a>
                                         <a href="{{ route('admin.resultados.index', $iniciativa->inic_codigo) }}"
                                             class="dropdown-item has-icon"><i class="fas fa-flag"></i>Ingresar
-                                            resultados</a>
+                                            resultados</a> --}}
                                         <a href="{{ route('admin.evaluacion.index', $iniciativa->inic_codigo) }}"
                                             class="dropdown-item has-icon"><i class="fas fa-file-signature"></i>Ingresar
                                             evaluación</a>
